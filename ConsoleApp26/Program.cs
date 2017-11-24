@@ -259,7 +259,7 @@ namespace ConsoleApp26
             }
             if (this.curr == 0)
             {
-                if (this.ran.Next(1, 20) > 16 || odds >= 0.69)
+                if (this.ran.Next(1, 20) > 17 || odds >= 0.5509 && this.ran.Next(0, 20) > 11)
                 {
                     this.Bet(0);
                     return;
@@ -274,26 +274,23 @@ namespace ConsoleApp26
             {
                 
                 int res = this.ran.Next(1, 20);
-                if (res > 17 || (this.odds >= 0.6669))
+                if (res > 17 || (this.odds >= 0.5509) && res > 10)
                 {
                     this.Bet(0);
                     return;
                 }
-                if (res >= 9 || (this.odds >= 0.4))
+                if (res >= 12 || (this.odds >= 0.5 && res > 6))
                 {
                     this.Call();
                     return;
                 }
-                if (res <= 9 || this.odds < 0.3)
-                {
                     this.Fold();
                     return;
-                }
             }
             else
             {
                 
-                if (this.ran.Next(1, 20) > 15 || this.odds >= 0.6)
+                if (this.ran.Next(1, 20) > 15 || this.odds >= 0.6 || this.credit < Game.ante + 30)
                 {
                     this.AllIn();
                     return;
