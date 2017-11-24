@@ -569,6 +569,7 @@ namespace ConsoleApp26
                 {
                     if (peeps.Where(go => go.folded == false).Count() > 1 && hy.folded == false)
                     {
+                        System.Threading.Thread.Sleep(1500);
                         Console.WriteLine(hy.name + " reveals " + String.Join(" ", hy.cards));
                     }
                 }
@@ -606,6 +607,7 @@ namespace ConsoleApp26
                         }
 
                     }
+                System.Threading.Thread.Sleep(1500);
                     foreach (Npc won in peeps)
                     {
                         if (won.folded == false)
