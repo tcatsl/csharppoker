@@ -68,7 +68,7 @@ namespace ConsoleApp26
                 this.inpot += this.curr;
                 this.credit -= this.curr;
                 int temp = this.curr;
-                int bettin = ran.Next(1, this.credit);
+                int bettin = ran.Next(1, (int)  (this.credit/(3-Game.rounds * ((double)(1/2)))));
                 if (credit <= 0)
                 {
                     bettin = 0;
@@ -108,7 +108,8 @@ namespace ConsoleApp26
 
         public void Fold()
         {
-            Console.WriteLine(this.name + " folds");
+            Console.WriteLine("XXXXXX0XXXXXXXXXXXXXXXXX0XXXXXX");
+            Console.WriteLine(this.name +" folds" );
             this.folded = true;
             this.curr = 0;
             Console.WriteLine("Pot: " + Game.pot);
@@ -259,7 +260,7 @@ namespace ConsoleApp26
             }
             if (this.curr == 0)
             {
-                if (this.ran.Next(1, 20) > 17 || odds >= 0.5509 && this.ran.Next(0, 20) > 11)
+                if (this.ran.Next(1, 21) > 16 || odds >= 0.5109 && this.ran.Next(0, 22) > 10)
                 {
                     this.Bet(0);
                     return;
@@ -274,12 +275,12 @@ namespace ConsoleApp26
             {
                 
                 int res = this.ran.Next(1, 20);
-                if (res > 17 || (this.odds >= 0.5509) && res > 10)
+                if (res > 17 || (this.odds >= 0.5509) && res > 8)
                 {
                     this.Bet(0);
                     return;
                 }
-                if (res >= 12 || (this.odds >= 0.5 && res > 6))
+                if (res >= 12 || (this.odds >= 0.5 && res > 5))
                 {
                     this.Call();
                     return;
