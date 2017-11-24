@@ -48,35 +48,40 @@ namespace ConsoleApp26
             this.tempwins = 0;
             this.odds = 0;
             ran = new Random();
+            
         }
         public void Bet(int amt)
         {
             
             if (amt < credit - curr)
             {
-                int maxValue = Game.peeps.Where(opp => opp != this && opp.folded == false).Select(unc => unc.credit).Count() > 0 ? Game.peeps.Where(opp => opp != this && opp.folded == false).Select(unc => unc.credit).Max() : 0;
-                int maxIndex = Game.peeps.Where(opp => opp != this && opp.folded == false).Select(unc => unc.credit).ToList().IndexOf(maxValue != 0 ? maxValue : -1);
+
+                int temp = amt;
+                int maxValue = Game.peeps.Where(opp => opp != this && opp.folded == false && opp.credit > 0).Count() > 0 ? Game.peeps.Where(opp => opp != this && opp.folded == false).Select(unc => unc.credit).Max() : -1;
+                int maxIndex = Game.peeps.Where(opp => opp != this && opp.folded == false).Select(unc => unc.credit).ToList().IndexOf(maxValue);
                 if (maxIndex != -1)
                 {
-                    if (amt > Game.peeps[maxIndex].credit)
+                    if (temp >= Game.peeps[maxIndex].credit)
                     {
-                        amt = Game.peeps[maxIndex].credit;
+                        temp = Game.peeps[maxIndex].credit;
+                        Console.WriteLine(this.name + " puts everyone all in for " + temp );
                     }
                 }
                 Game.pot += this.curr;
                 this.inpot += this.curr;
                 this.credit -= this.curr;
-                int temp = this.curr;
                 int bettin = ran.Next(1, (int)  (this.credit/(3-Game.rounds * ((double)(1/2)))));
                 if (credit <= 0)
                 {
                     bettin = 0;
                     curr = 0;
                 }
-                if (amt != 0)
-                    bettin = amt;
-
-                Console.WriteLine(this.name + " calls " + this.curr + " and raises " + bettin);
+                if (temp != 0)
+                    bettin = temp;
+                if (temp < Game.peeps[maxIndex].credit)
+                {
+                    Console.WriteLine(this.name + " calls " + this.curr + " and raises " + bettin);
+                }
                 this.credit -= bettin;
                 this.inpot += bettin;
                 Game.pot += bettin;
