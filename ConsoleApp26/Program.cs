@@ -473,8 +473,8 @@ namespace ConsoleApp26
                 
                 if (peeps.Where(pr=>pr.credit >= ante).Count() > 2)
                 {
-                    peeps[2].Ante();
-                    peeps[1].SmallAnte();
+                    peeps[1].Ante();
+                    peeps[2].SmallAnte();
                 } else
                 {
                     peeps.Where(po=>po.credit >=ante).ToList()[1].Ante();
