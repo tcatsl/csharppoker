@@ -218,10 +218,7 @@ namespace ConsoleApp26
             }
         public bool TryWin()
         {
-            if (this.cards.Count() > 0)
-            {
-
-
+            int trywins = 0;
                 List<string> tempcards = new List<string>();
                 List<List<string>> oppcards = new List<List<string>>();
 
@@ -244,11 +241,13 @@ namespace ConsoleApp26
                     tempcards.Add(tempdeck[dex]);
                     tempdeck.RemoveAt(dex);
                 }
-                return Game.peeps.Where(mip => mip.folded == false && mip != this).Count() < 2 ? new PokerHand(string.Join(" ", this.cards.Concat(Game.board).Concat(tempcards))).CompareWith(new PokerHand(string.Join(" ", tempcards.Concat(Game.board).Concat(oppcards[0])))) == Result.Win : (new PokerHand(string.Join(" ", this.cards.Concat(Game.board).Concat(tempcards))).CompareWith(new PokerHand(string.Join(" ", tempcards.Concat(Game.board).Concat(oppcards[0])))) == Result.Win && new PokerHand(string.Join(" ", this.cards.Concat(Game.board).Concat(tempcards))).CompareWith(new PokerHand(string.Join(" ", tempcards.Concat(Game.board).Concat(oppcards[1])))) == Result.Win);
-            } else
+                foreach(List<string> opp in oppcards)
             {
-                return this.ran.Next(0, 1) > 0 ? true : false;
+                trywins += new PokerHand(string.Join(" ", this.cards.Concat(Game.board).Concat(tempcards))).CompareWith(new PokerHand(string.Join(" ", tempcards.Concat(Game.board).Concat(opp)))) == Result.Win ? 1 : 0;
             }
+            return trywins == Game.peeps.Where(mip => mip.folded == false && mip != this).Count();
+
+
         }
         public void AI()
         {
@@ -424,7 +423,7 @@ namespace ConsoleApp26
     public static class Game
     {
         public static List<string> playercards = new List<string>();
-        public static List<Npc> peeps = new List<Npc> { new Npc(false, "knuckles"), new Npc(false, "Dante") };
+        public static List<Npc> peeps = new List<Npc> { new Npc(false, "knuckles"), new Npc(false, "Dante"), new Npc(false, "Bob") };
         public static Random ran2 = new Random();
         public static int pot = 0;
         public static int ante = 50;
@@ -482,21 +481,14 @@ namespace ConsoleApp26
         }
         public static void SubroundStart()
         {
-            turn = 0;
+            int plin = Game.peeps.Where(per => per.folded == false).Count();
+            turn = 1;
             if (subround == 0)
             {
                 
                 
-                if (peeps.Where(pr=>pr.credit >= ante).Count() > 2)
-                {
-                    peeps[2].Ante();
-                    peeps[1].SmallAnte();
-                } else
-                {
-                    peeps.Where(po=>po.credit >=ante).ToList()[1].Ante();
-                    peeps.Where(po => po.credit >= ante).ToList()[0].SmallAnte();
-                }
-
+                    peeps[peeps.Count()-1].Ante();
+                    peeps[peeps.Count() -2 ].SmallAnte();
 
             }
             if (subround == 1)
@@ -527,13 +519,12 @@ namespace ConsoleApp26
 
             for (var u = 0; u < 99; u++)
             {
-
-                if ((peeps.Where(mp => mp.curr == 0).Count() == 3) && turn >= Game.peeps.Where(per => per.folded == false).Count() + (subround == 0 ? 1:0))
+                
+                if ((peeps.Where(mp => mp.curr == 0).Count() == peeps.Count()) && turn > plin)
                     break;
                 foreach (Npc one2 in peeps.Where(per => per.folded == false).ToList())
                 {
-                    
-                    if ((peeps.Where(mp => mp.curr == 0).Count() == 3) && turn >= Game.peeps.Where(per => per.folded == false).Count() + (subround == 0 ? 1 : 0))
+                    if ((peeps.Where(mp => mp.curr == 0).Count() >= peeps.Count()) && turn > plin)
                         break;
                     
                     if (subround == 0 && one2.folded == false)
@@ -549,7 +540,7 @@ namespace ConsoleApp26
                     }
                     
 
-                    Console.WriteLine("___________turn_start__________");
+                    Console.WriteLine("__________turn_"+ turn +"_start_________");
                     if (one2.player == true)
                     {
                         Console.WriteLine("your cards: " + string.Join(" ", one2.cards));
@@ -602,13 +593,12 @@ namespace ConsoleApp26
                         {
                             continue;
                         }
-                        Result[] cons = new Result[3];
-                        Result one = peeps[0].folded ? Result.Win : new PokerHand(string.Join(" ", man.cards.Concat(Game.board))).CompareWith(new PokerHand(string.Join(" ", peeps[0].cards.Concat(Game.board))));
-                        cons[0] = one;
-                        Result two = peeps[1].folded ? Result.Win : new PokerHand(string.Join(" ", man.cards.Concat(Game.board))).CompareWith(new PokerHand(string.Join(" ", peeps[1].cards.Concat(Game.board))));
-                        cons[1] = two;
-                        Result three = peeps[2].folded ? Result.Win : new PokerHand(string.Join(" ", man.cards.Concat(Game.board))).CompareWith(new PokerHand(string.Join(" ", peeps[2].cards.Concat(Game.board))));
-                        cons[2] = three;
+                        Result[] cons = new Result[peeps.Where(ok=>ok.folded == false && ok != man).Count()];
+                    for (int q = 0; q < peeps.Where(ok => ok.folded == false && ok != man).Count(); q++)
+                    {
+                        Npc opper = peeps.Where(ok => ok.folded == false && ok != man).ToList()[q];
+                        cons[q] = new PokerHand(string.Join(" ", man.cards.Concat(Game.board))).CompareWith(new PokerHand(string.Join(" ", opper.cards.Concat(Game.board))));
+                    }
                         foreach (Result tuy in cons)
                         {
                             if (tuy.ToString() == Result.Loss.ToString())
