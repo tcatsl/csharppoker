@@ -53,10 +53,13 @@ namespace ConsoleApp26
         public void Bet(int amt)
         {
             int maxValue = Game.peeps.Where(opp => opp != this && opp.folded == false).Select(unc => unc.credit).Count() > 0 ? Game.peeps.Where(opp => opp != this && opp.folded == false).Select(unc => unc.credit).Max() : 0;
-            int maxIndex = Game.peeps.Where(opp => opp != this && opp.folded == false).Select(unc => unc.credit).ToList().IndexOf(maxValue);
-            if (amt > Game.peeps[maxIndex].credit)
+            int maxIndex = Game.peeps.Where(opp => opp != this && opp.folded == false).Select(unc => unc.credit).ToList().IndexOf(maxValue != 0 ? maxValue : -1);
+            if (maxIndex != -1)
             {
-                amt = Game.peeps[maxIndex].credit;
+                if (amt > Game.peeps[maxIndex].credit)
+                {
+                    amt = Game.peeps[maxIndex].credit;
+                }
             }
             if (amt < credit - curr)
             {
@@ -256,7 +259,7 @@ namespace ConsoleApp26
             }
             if (this.curr == 0)
             {
-                if (this.ran.Next(1, 20) > 17 || odds >= 0.6)
+                if (this.ran.Next(1, 20) > 16 || odds >= 0.69)
                 {
                     this.Bet(0);
                     return;
@@ -271,12 +274,12 @@ namespace ConsoleApp26
             {
                 
                 int res = this.ran.Next(1, 20);
-                if (res > 16 || (this.odds >= 0.7))
+                if (res > 17 || (this.odds >= 0.6669))
                 {
                     this.Bet(0);
                     return;
                 }
-                if (res <= 14 && res > 9 || (this.odds >= 0.6))
+                if (res >= 9 || (this.odds >= 0.4))
                 {
                     this.Call();
                     return;
@@ -290,7 +293,7 @@ namespace ConsoleApp26
             else
             {
                 
-                if (this.ran.Next(1, 20) > 15 || this.odds >= 0.5)
+                if (this.ran.Next(1, 20) > 15 || this.odds >= 0.6)
                 {
                     this.AllIn();
                     return;
@@ -473,8 +476,8 @@ namespace ConsoleApp26
                 
                 if (peeps.Where(pr=>pr.credit >= ante).Count() > 2)
                 {
-                    peeps[1].Ante();
-                    peeps[2].SmallAnte();
+                    peeps[2].Ante();
+                    peeps[1].SmallAnte();
                 } else
                 {
                     peeps.Where(po=>po.credit >=ante).ToList()[1].Ante();
@@ -534,7 +537,7 @@ namespace ConsoleApp26
                     
 
                     Console.WriteLine("___________turn_start__________");
-                    if (one2.player == true && one2.folded == false && (one2.curr == 0 || (one2.folded == false && subround != 0) || peeps.Where(pla=>pla.player == true && pla.folded == false).Count() > 1 || one2.inpot > 0))
+                    if (one2.player == true)
                     {
                         Console.WriteLine("your cards: " + string.Join(" ", one2.cards));
 
