@@ -1,0 +1,7 @@
+C:\Users\tcats\source\repos\ConsoleApp26\ConsoleApp26\bin\Release\ConsoleApp26.exe.config
+C:\Users\tcats\source\repos\ConsoleApp26\ConsoleApp26\bin\Release\ConsoleApp26.exe
+C:\Users\tcats\source\repos\ConsoleApp26\ConsoleApp26\bin\Release\ConsoleApp26.pdb
+C:\Users\tcats\source\repos\ConsoleApp26\ConsoleApp26\obj\Release\ConsoleApp26.csproj.CoreCompileInputs.cache
+C:\Users\tcats\source\repos\ConsoleApp26\ConsoleApp26\obj\Release\ConsoleApp26.exe
+C:\Users\tcats\source\repos\ConsoleApp26\ConsoleApp26\obj\Release\ConsoleApp26.pdb
+C:\Users\tcats\source\repos\ConsoleApp26\ConsoleApp26\obj\Release\ConsoleApp26.csprojResolveAssemblyReference.cache
