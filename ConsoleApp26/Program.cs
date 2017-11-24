@@ -193,6 +193,8 @@ namespace ConsoleApp26
         public float Ponder()
         {
             Console.WriteLine(this.name + " is thinking");
+            if (this.player == false) 
+                System.Threading.Thread.Sleep(3500);
             this.Reset();
             if (this.cards.Count() > 0)
             {
@@ -353,16 +355,31 @@ namespace ConsoleApp26
                 if (act == "bet")
                 {
                     int c;
-                    Console.WriteLine("Bet how much?");
-                    c = Int32.Parse(Console.ReadLine());
-                    if (c > 0 && c <= this.credit)
+
+                    Rebet:
                     {
-                        this.Bet(c);
-                        return;
-                    } else
-                    {
-                        Console.WriteLine("not a enough funds");
-                        this.NotAI();
+                        Console.WriteLine("Bet how much?");
+                        string inp = Console.ReadLine();
+                        int y = 0;
+                        bool succ = Int32.TryParse(inp, out y);
+                        if (succ)
+                        {
+
+
+                            c = Int32.Parse(inp);
+                            if (c > 0 && c <= this.credit)
+                            {
+                                this.Bet(c);
+                                return;
+                            } else
+                            {
+                                Console.WriteLine("not a enough funds");
+                                this.NotAI();
+                            }
+                        } else
+                        {
+                            goto Rebet;
+                        }
                     }
                 }
                 else if (act == "call")
