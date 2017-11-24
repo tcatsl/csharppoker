@@ -51,18 +51,18 @@ namespace ConsoleApp26
         }
         public void Bet(int amt)
         {
-            int maxValue = Game.peeps.Where(opp => opp != this && opp.folded == false).Select(unc => unc.credit).Count() > 0 ? Game.peeps.Where(opp => opp != this && opp.folded == false).Select(unc => unc.credit).Max() : 0;
-            int maxIndex = Game.peeps.Where(opp => opp != this && opp.folded == false).Select(unc => unc.credit).ToList().IndexOf(maxValue != 0 ? maxValue : -1);
-            if (maxIndex != -1)
-            {
-                if (amt > Game.peeps[maxIndex].credit)
-                {
-                    amt = Game.peeps[maxIndex].credit;
-                }
-            }
+            
             if (amt < credit - curr)
             {
-
+                int maxValue = Game.peeps.Where(opp => opp != this && opp.folded == false).Select(unc => unc.credit).Count() > 0 ? Game.peeps.Where(opp => opp != this && opp.folded == false).Select(unc => unc.credit).Max() : 0;
+                int maxIndex = Game.peeps.Where(opp => opp != this && opp.folded == false).Select(unc => unc.credit).ToList().IndexOf(maxValue != 0 ? maxValue : -1);
+                if (maxIndex != -1)
+                {
+                    if (amt > Game.peeps[maxIndex].credit)
+                    {
+                        amt = Game.peeps[maxIndex].credit;
+                    }
+                }
                 Game.pot += this.curr;
                 this.inpot += this.curr;
                 this.credit -= this.curr;
@@ -126,6 +126,7 @@ namespace ConsoleApp26
         {
             Console.WriteLine(this.name + " checks");
             Console.WriteLine("Pot: " + Game.pot);
+            this.curr = 0;
         }
         public void AllIn()
         {
@@ -194,8 +195,6 @@ namespace ConsoleApp26
         public float Ponder()
         {
             Console.WriteLine(this.name + " is thinking");
-            if (this.player == false) 
-                System.Threading.Thread.Sleep(1500);
             this.Reset();
             if (this.cards.Count() > 0)
             {
@@ -215,7 +214,7 @@ namespace ConsoleApp26
             }
             this.iter++;
 
-            return (float) (Math.Abs(((double)tempwins / (iter + 1) - (double)wins / iter)) < 0.0001 && iter > 100 ? (double) (wins / iter) : this.Speculate());
+            return (float) (Math.Abs(((double)tempwins / (iter + 1) - (double)wins / iter)) < 0.00005 && iter > 100 ? (double) (wins / iter) : this.Speculate());
             }
         public bool TryWin()
         {
