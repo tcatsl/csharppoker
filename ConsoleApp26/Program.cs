@@ -306,7 +306,7 @@ namespace ConsoleApp26
         {
             this.odds = this.Ponder();
             Console.WriteLine((this.cards.Count() > 0 ? (int)(this.odds  * 100) : 33) + "% chance of winning");
-            if (this.folded == true || Game.peeps.Where(ui=> ui.folded == true).Count() > 1)
+            if (this.folded == true || Game.peeps.Where(ui=> ui.folded == true).Count() > Game.peeps.Count() - 2)
                 return;
             Console.WriteLine("Balance: " + this.credit);
             if (Game.peeps.Where(peepa=>peepa.credit > 0 && peepa.folded == false && peepa.player == false).Count() < 1 || this.credit <= 0)
