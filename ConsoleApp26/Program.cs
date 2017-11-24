@@ -194,7 +194,7 @@ namespace ConsoleApp26
         {
             Console.WriteLine(this.name + " is thinking");
             if (this.player == false) 
-                System.Threading.Thread.Sleep(3500);
+                System.Threading.Thread.Sleep(1500);
             this.Reset();
             if (this.cards.Count() > 0)
             {
