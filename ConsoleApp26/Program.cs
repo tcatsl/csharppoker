@@ -11,7 +11,8 @@ namespace ConsoleApp26
         static void Main(string[] args)
         {
             //your hand
-            PokerHand test1 = new PokerHand("AH QH TH KC JS 3D AH");
+            Console.OutputEncoding = System.Text.Encoding.UTF8;
+            PokerHand test1 = new PokerHand("4C 4D 6D 2C JS 3D AH");
             //their hand
             PokerHand test2 = new PokerHand("AS 2S 3S 4S 5D 2D TH");
             //you win. high card.Console.WriteLine(test1.CompareWith(test2).ToString() + test1.flush + test2.flush + string.Join(",", test1.nums));
@@ -431,7 +432,7 @@ namespace ConsoleApp26
         public static int turn;
         public static int subround = 0;
         public static List<string> board = new List<string>();
-        public static char[] suits = new char[] { 'S', 'D', 'H', 'C' };
+        public static char[] suits = new char[] { '\u2660', '\u2665', '\u2666', '\u2663' };
         public static List<string> deck = new List<string>();
         public static string namer;
         public static void GameStart()
@@ -589,7 +590,7 @@ namespace ConsoleApp26
                 }
                     foreach (Npc man in peeps)
                     {
-                        if (man.folded == true || peeps.Where(poo => poo.folded == true).Count() > 1)
+                        if (man.folded == true || peeps.Where(poo => poo.folded == true).Count() > peeps.Count() -2)
                         {
                             continue;
                         }
