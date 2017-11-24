@@ -728,7 +728,6 @@ namespace ConsoleApp26
 
                 streak++;
             }
-            Console.WriteLine(string.Join(" ", pok.straightArr));
             if (streak < 5)
             {
                 pok.straight = false;
