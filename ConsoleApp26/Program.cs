@@ -607,7 +607,7 @@ namespace ConsoleApp26
                         }
 
                     }
-                System.Threading.Thread.Sleep(1500);
+                System.Threading.Thread.Sleep(3000);
                     foreach (Npc won in peeps)
                     {
                         if (won.folded == false)
