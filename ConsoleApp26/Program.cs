@@ -423,7 +423,7 @@ namespace ConsoleApp26
     public static class Game
     {
         public static List<string> playercards = new List<string>();
-        public static List<Npc> peeps = new List<Npc> { new Npc(false, "knuckles"), new Npc(false, "Dante"), new Npc(false, "Bob") };
+        public static List<Npc> peeps = new List<Npc> { new Npc(false, "knuckles"), new Npc(false, "Dante"), new Npc(false, "Jeanne") };
         public static Random ran2 = new Random();
         public static int pot = 0;
         public static int ante = 50;
