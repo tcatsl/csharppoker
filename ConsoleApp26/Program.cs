@@ -528,7 +528,7 @@ namespace ConsoleApp26
                     if ((peeps.Where(mp => mp.curr == 0).Count() >= peeps.Count()) && turn > plin)
                         break;
                     
-                    if (subround == 0 && one2.folded == false)
+                    if (one2.cards.Count() == 0)
                     {
                         one2.cards = new List<string>();
                         for (var d = 0; d < 2; d++)
