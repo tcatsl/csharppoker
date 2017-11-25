@@ -616,7 +616,7 @@ namespace ConsoleApp26
                     {
                         if (peeps.Where(ip => new PokerHand(string.Join(" ", outof.cards.Concat(Game.board))).CompareWith(new PokerHand(string.Join(" ", ip.cards.Concat(Game.board)))) == Result.Loss).Count() == 0)
                         {
-                            outof.credit += peeps.Select(plo => plo.inpot <= outof.inpot ? plo.inpot : plo.inpot - (outof.inpot - plo.inpot)).Sum();
+                            outof.credit += peeps.Select(plo => plo.inpot <= outof.inpot ? plo.inpot : outof.inpot).Sum();
                             Game.pot -= peeps.Select(plo => plo.inpot >= outof.inpot ? plo.inpot : plo.inpot - (outof.inpot - plo.inpot)).Sum();
                             Console.WriteLine(outof.name + "won" + peeps.Select(plo => plo.inpot >= outof.inpot ? plo.inpot : plo.inpot - (outof.inpot - plo.inpot)).Sum());
                             outof.folded = true;
