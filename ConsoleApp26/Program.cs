@@ -59,7 +59,7 @@ namespace ConsoleApp26
             {
                 temp = credit;
             }
-            if (true == true)
+            
             {
                 int maxValue = Game.peeps.Where(opp => opp != this && opp.folded == false && opp.credit > 0).Count() > 0 ? Game.peeps.Where(opp => opp != this && opp.folded == false).Select(unc => unc.credit).Max() : -1;
                 int maxIndex = Game.peeps.Select(unc => unc.credit).ToList().IndexOf(maxValue);
@@ -91,12 +91,16 @@ namespace ConsoleApp26
                 this.inpot += this.curr;
                 this.credit -= this.curr;
                 int bettin = 0;
-                if (Game.ante > (int)(this.credit / (3 - Game.rounds * ((double)(1 / 2)))))
+                if (Game.ante < (int)(this.credit / (3 - Game.rounds * ((double)(1 / 2)))))
                 {
-                    bettin = ran.Next(Game.ante, (int)(this.credit / (3 - Game.rounds * ((double)(1 / 2)))));
-                } else
+                    temp = ran.Next(Game.ante, (int)(this.credit / (3 - Game.rounds * ((double)(1 / 2)))));
+                } else if( Game.ante <= credit)
                 {
-                    bettin = Game.ante;
+                    temp = Game.ante;
+                }
+                else
+                {
+                    temp = credit;
                 }
                 if (credit <= 0)
                 {
@@ -603,12 +607,13 @@ namespace ConsoleApp26
                     split = true;
                 }
                 if (split == true)
-                { foreach (Npc outof in peeps.Where(peep1 => peep1.folded == false && peep1.inpot != fullamt).ToList())
+                { foreach (Npc outof in peeps.Where(peep1 => peep1.folded == false && peep1.inpot < fullamt).ToList())
                     {
                         if (peeps.Where(ip => new PokerHand(string.Join(" ", outof.cards.Concat(Game.board))).CompareWith(new PokerHand(string.Join(" ", ip.cards.Concat(Game.board)))) == Result.Loss).Count() == 0)
                         {
                             outof.credit += peeps.Select(plo => plo.inpot >= outof.inpot ? outof.inpot : plo.inpot - (outof.inpot - plo.inpot)).Sum();
                             Game.pot -= peeps.Select(plo => plo.inpot >= outof.inpot ? outof.inpot : plo.inpot - (outof.inpot - plo.inpot)).Sum();
+                            Console.WriteLine(outof.name + "won" + peeps.Select(plo => plo.inpot >= outof.inpot ? outof.inpot : plo.inpot - (outof.inpot - plo.inpot)).Sum());
                             outof.folded = true;
                         }
                     }
