@@ -614,20 +614,27 @@ namespace ConsoleApp26
                     split = true;
                 }
                 if (split == true)
-                { foreach (Npc outof in peeps.Where(peep1 => peep1.folded == false && peep1.inpot < fullamt).ToList())
+                { foreach (Npc outof in peeps.Where(peep1 => peep1.folded == false && peep1.inpot < fullamt).OrderBy(pl=> pl.inpot).Reverse().ToList())
                     {
                         if (peeps.Where(ip => new PokerHand(string.Join(" ", outof.cards.Concat(Game.board))).CompareWith(new PokerHand(string.Join(" ", ip.cards.Concat(Game.board)))) == Result.Loss).Count() == 0)
                         {
                             outof.credit += peeps.Select(plo => plo.inpot <= outof.inpot ? plo.inpot : outof.inpot).Sum();
                             Game.pot -= peeps.Select(plo => plo.inpot >= outof.inpot ? plo.inpot : plo.inpot - (outof.inpot - plo.inpot)).Sum();
-                            Console.WriteLine(outof.name + "won" + peeps.Select(plo => plo.inpot >= outof.inpot ? plo.inpot : plo.inpot - (outof.inpot - plo.inpot)).Sum());
+                            Console.WriteLine(outof.name + "won: " + peeps.Select(plo => plo.inpot >= outof.inpot ? plo.inpot : plo.inpot - (outof.inpot - plo.inpot)).Sum());
                             outof.folded = true;
+                            foreach (Npc lk in peeps.Where(ml=>ml.folded = false && ml != outof))
+                            {
+                                lk.inpot -= outof.inpot;
+                            }
+                            fullamt -= outof.inpot;
+
+                            outof.inpot = 0;
                         }
                     }
                 }
                     foreach (Npc man in peeps)
                     {
-                        if (man.folded == true || peeps.Where(poo => poo.folded == true).Count() > peeps.Count() -2)
+                        if (man.folded == true)
                         {
                             continue;
                         }
@@ -644,7 +651,6 @@ namespace ConsoleApp26
                         }
 
                     }
-                System.Threading.Thread.Sleep(3000);
                     foreach (Npc won in peeps)
                     {
                         if (won.folded == false)
@@ -656,7 +662,8 @@ namespace ConsoleApp26
                 Game.pot = 0;
 
                 subround = 0;
-                
+
+                System.Threading.Thread.Sleep(3000);
             }
 
             if (peeps.Where(lk => lk.credit < ante).Count() <= 1)
@@ -745,27 +752,27 @@ namespace ConsoleApp26
             int count = pok.nums.Distinct().Count();
             for (int o = 0; o < pok.nums.Distinct().Count() - 1; o++)
 
-                {
-                    start = customOrder.ToList().IndexOf(pok.nums.Distinct().ToList()[o]);
-                    if (streak >= 5 || pok.nums.Distinct().Count() < 5)
-                        break;
-                    int ahead = customOrder.ToList().IndexOf(pok.nums.Distinct().ToList()[o+1]);
-                    
-                    if (start + 1 != ahead)
-                    {
-                        strikes++;
-                        streak = 1;
-                        continue;
-                    }
-                    else
-                    {
-                    pok.straightArr[streak-1] = pok.nums.Distinct().ToList()[o];
-                        pok.straightArr[streak] = pok.nums.Distinct().ToList()[o+1];
+            {
+                start = customOrder.ToList().IndexOf(pok.nums.Distinct().ToList()[o]);
+                if (streak >= 5 || pok.nums.Distinct().Count() < 5)
+                    break;
+                int ahead = customOrder.ToList().IndexOf(pok.nums.Distinct().ToList()[o + 1]);
 
-                        streak++;
-                        continue;
-                    }
-                    //if the cards aren't consecutive
+                if (start + 1 != ahead)
+                {
+                    strikes++;
+                    streak = 1;
+                    continue;
+                }
+                else
+                {
+                    pok.straightArr[streak - 1] = pok.nums.Distinct().ToList()[o];
+                    pok.straightArr[streak] = pok.nums.Distinct().ToList()[o + 1];
+
+                    streak++;
+                    continue;
+                }
+                //if the cards aren't consecutive
             }
             if (streak == 4 && pok.nums.Distinct().ToList()[0] == 'A' && pok.straightArr[streak - 1] == '2')
 
@@ -777,19 +784,27 @@ namespace ConsoleApp26
             if (streak < 5)
             {
                 pok.straight = false;
+
             }
-                    pok.nums = pok.nums.ToList().GroupBy(n => n)
+            if (pok.flush == true && pok.straight == false)
+            {
+                pok.straightArr = pok.arr.Where(suit1 => pok.arr.Where(suit2 => suit1[1] == suit2[1]).Count() >= 5).Select(card => card[0]).OrderBy(group => Array.IndexOf(customOrder, group)).Take(5).ToArray();
+            }
+            else if (pok.flush == false && pok.straight == false)
+            {
+                pok.straightArr = pok.nums.ToList().GroupBy(n => n)
                     .Select(group => new
                     {
                         Number = group.Key,
                         Count = group.Count()
                     })
                     .OrderByDescending(group => group.Count)
-                    .ThenBy(group => Array.IndexOf(customOrder, group.Number)).SelectMany(group => Enumerable.Repeat(group.Number, group.Count)).ToArray();
-                
-            //generate binary hand reduction for easy scoring
-            //Console.WriteLine(pok.straight);
+                    .ThenBy(group => Array.IndexOf(customOrder, group.Number)).SelectMany(group => Enumerable.Repeat(group.Number, group.Count)).Take(5).ToArray();
+            }
+                //generate binary hand reduction for easy scoring
+                //Console.WriteLine(pok.straight);
                 pok.binwin = new int[] { pok.straight && pok.flush ? 1 : 0, pok.four ? 1 : 0, pok.full ? 1 : 0, pok.flush ? 1 : 0, pok.straight ? 1 : 0, pok.trip ? 1 : 0, pok.twopair ? 1 : 0, pok.pair ? 1 : 0, 1 }; //high card is always true
+            
         }
 
             //compare another hand to your hand. returns the result for the owner of the hand it was called from
@@ -813,23 +828,8 @@ namespace ConsoleApp26
                     }
 
                     //if you have the same hand
-                    else if (this.binwin[g] == 1 && hand.binwin[g] == 1 && this.straight == false)
-                    {
-                        //high card determination
-                        for (int z = 0; z < 5; z++)
-                        {
-                            if (customOrder.ToList().IndexOf(this.nums[z]) < customOrder.ToList().IndexOf(hand.nums[z]))
-                            {
-                                return Result.Win;
-                            }
-                            else if (customOrder.ToList().IndexOf(this.nums[z]) > customOrder.ToList().IndexOf(hand.nums[z]))
-                            {
-                                return Result.Loss;
-                            }
-                        }
-                        return Result.Tie;
-                    }
-                    else if (this.binwin[g] == 1 && hand.binwin[g] == 1 && this.straight == true)
+                   
+                    else if (this.binwin[g] == 1 && hand.binwin[g] == 1)
                     {
                         for (int z = 0; z < 5; z++)
                         {
