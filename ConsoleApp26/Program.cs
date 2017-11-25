@@ -52,11 +52,15 @@ namespace ConsoleApp26
         }
         public void Bet(int amt)
         {
-            
-            if (amt < credit - curr)
-            {
 
-                int temp = amt;
+
+            int temp = amt;
+            if (temp > credit + curr)
+            {
+                temp = credit;
+            }
+            if (true == true)
+            {
                 int maxValue = Game.peeps.Where(opp => opp != this && opp.folded == false && opp.credit > 0).Count() > 0 ? Game.peeps.Where(opp => opp != this && opp.folded == false).Select(unc => unc.credit).Max() : -1;
                 int maxIndex = Game.peeps.Where(opp => opp != this && opp.folded == false).Select(unc => unc.credit).ToList().IndexOf(maxValue);
                 if (maxIndex != -1)
@@ -66,6 +70,22 @@ namespace ConsoleApp26
                         temp = Game.peeps[maxIndex].credit;
                         Console.WriteLine(this.name + " puts everyone all in for " + temp );
                     }
+                }
+                if (temp == credit)
+                {
+                    Game.pot += this.credit;
+
+                    Console.WriteLine(this.name + " goes all in for " + this.credit);
+                    this.inpot += this.credit;
+
+
+                    foreach (Npc dude in Game.peeps)
+                    {
+                        if (dude.folded == false && dude.credit > 0 && dude != this && (this.credit - this.curr) > 0)
+                            dude.curr += this.credit - this.curr;
+                    }
+                    this.credit = 0;
+                    goto Donezo;
                 }
                 Game.pot += this.curr;
                 this.inpot += this.curr;
@@ -85,28 +105,15 @@ namespace ConsoleApp26
                 this.credit -= bettin;
                 this.inpot += bettin;
                 Game.pot += bettin;
+                Game.fullamt += bettin;
                 foreach (Npc dude in Game.peeps)
                 {
                     if (dude != this && dude.folded == false && dude.credit > 0)
                         dude.curr += bettin;
                 }
 
-            } else
-            {
-                Game.pot += this.credit;
-
-                Console.WriteLine(this.name + " goes all in for " + this.credit);
-                this.inpot += this.credit;
-
-
-                foreach (Npc dude in Game.peeps)
-                {
-                    if (dude.folded == false && dude.credit > 0 && dude != this && (this.credit - this.curr) > 0)
-                        dude.curr += this.credit - this.curr;
-                }
-                this.credit = 0;
             }
-
+            Donezo:
             this.curr = 0;
         }
 
@@ -427,6 +434,7 @@ namespace ConsoleApp26
     }
     public static class Game
     {
+        public static int fullamt = 0;
         public static List<string> playercards = new List<string>();
         public static List<Npc> peeps = new List<Npc> { new Npc(false, "knuckles"), new Npc(false, "Dante"), new Npc(false, "Jeanne") };
         public static Random ran2 = new Random();
@@ -584,14 +592,15 @@ namespace ConsoleApp26
                     split = true;
                 }
                 if (split == true)
-                {
-                        Npc outof = peeps.Where(peep1 => peep1.folded == false && peep1.inpot != pot / peeps.Where(peeper => peeper.folded == false).Count()).ToList()[0];
+                { foreach (Npc outof in peeps.Where(peep1 => peep1.folded == false && peep1.inpot != fullamt).ToList())
+                    {
                         if (peeps.Where(ip => new PokerHand(string.Join(" ", outof.cards.Concat(Game.board))).CompareWith(new PokerHand(string.Join(" ", ip.cards.Concat(Game.board)))) == Result.Win).Count() > 1)
                         {
-                            outof.credit += outof.inpot * 3;
+                            outof.credit += outof.inpot * peeps.Where(peep1 => peep1.folded == false && peep1.inpot != fullamt).Count();
                             Game.pot -= outof.inpot * 3;
                             outof.folded = true;
                         }
+                    }
                 }
                     foreach (Npc man in peeps)
                     {
