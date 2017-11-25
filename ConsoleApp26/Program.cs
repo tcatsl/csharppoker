@@ -254,9 +254,9 @@ namespace ConsoleApp26
                 List<string> tempcards = new List<string>();
                 List<List<string>> oppcards = new List<List<string>>();
 
-                List<string> tempdeck = new List<string>(Game.deck.Concat((Game.peeps.Where(pepe => pepe.cards.Count() > 0 && pepe == this).Count() > 1) ? Game.peeps.Where(pepe => pepe.cards.Count() > 0 && pepe == this).ToList()[0].cards.Concat(Game.peeps.Where(pepe => pepe.cards.Count() > 0 && pepe == this).ToList()[1].cards) : Game.peeps.Where(pepe => pepe.cards.Count() > 0 && pepe == this).ToList()[0].cards));
+                List<string> tempdeck = new List<string>(Game.deck.Concat(Game.peeps.Where(peeper=> peeper != this).Select(io=>io.cards).SelectMany(i=> i)));
 
-                for (int u = 0; u < Game.peeps.Where(mip => mip.folded == false && mip != this).Count(); u++)
+                for (int u = 0; u < Game.peeps.Where(mip => mip != this).Count(); u++)
                 {
                     List<string> tempc = new List<string>();
                     for (int im = 0; im < 2; im++)
@@ -273,8 +273,10 @@ namespace ConsoleApp26
                     tempcards.Add(tempdeck[dex]);
                     tempdeck.RemoveAt(dex);
                 }
-                foreach(List<string> opp in oppcards)
+            for (int u = 0; u < Game.peeps.Count() - Game.peeps.Where(pl => pl ==this||pl.folded == true).Count(); u++)
+                
             {
+                List<string> opp = oppcards[u];
                 trywins += new PokerHand(string.Join(" ", this.cards.Concat(Game.board).Concat(tempcards))).CompareWith(new PokerHand(string.Join(" ", tempcards.Concat(Game.board).Concat(opp)))) == Result.Win ? 1 : 0;
             }
             return trywins == Game.peeps.Where(mip => mip.folded == false && mip != this).Count();
