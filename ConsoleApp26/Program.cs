@@ -90,7 +90,14 @@ namespace ConsoleApp26
                 Game.pot += this.curr;
                 this.inpot += this.curr;
                 this.credit -= this.curr;
-                int bettin = ran.Next(1, (int)  (this.credit/(3-Game.rounds * ((double)(1/2)))));
+                int bettin = 0;
+                if (Game.ante > (int)(this.credit / (3 - Game.rounds * ((double)(1 / 2)))))
+                {
+                    bettin = ran.Next(Game.ante, (int)(this.credit / (3 - Game.rounds * ((double)(1 / 2)))));
+                } else
+                {
+                    bettin = Game.ante;
+                }
                 if (credit <= 0)
                 {
                     bettin = 0;
@@ -382,13 +389,13 @@ namespace ConsoleApp26
 
 
                             c = Int32.Parse(inp);
-                            if (c > 0 && c <= this.credit)
+                            if (c >= Game.ante && c <= this.credit)
                             {
                                 this.Bet(c);
                                 return;
                             } else
                             {
-                                Console.WriteLine("not a enough funds");
+                                Console.WriteLine("minimum bet is: " + Game.ante+". maximum is: "+(this.credit - this.curr)+".");
                                 this.NotAI();
                             }
                         } else
