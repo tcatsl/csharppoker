@@ -91,7 +91,7 @@ namespace ConsoleApp26
                 this.inpot += this.curr;
                 this.credit -= this.curr;
                 int bettin = 0;
-                if (Game.ante < (int)(this.credit / (3 - Game.rounds * ((double)(1 / 2)))))
+                if (this.player == false && Game.ante < (int)(this.credit / (3 - Game.rounds * ((double)(1 / 2)))))
                 {
                     temp = ran.Next(Game.ante, (int)(this.credit / (3 - Game.rounds * ((double)(1 / 2)))));
                 } else if( Game.ante <= credit)
