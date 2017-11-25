@@ -135,7 +135,6 @@ namespace ConsoleApp26
             this.curr = 0;
             Donezo:
             this.curr = 0;
-            Console.WriteLine(Game.fullamt);
         }
 
         public void Fold()
