@@ -77,12 +77,17 @@ namespace ConsoleApp26
 
                     Console.WriteLine(this.name + " goes all in for " + this.credit);
                     this.inpot += this.credit;
-
+                    
 
                     foreach (Npc dude in Game.peeps)
                     {
                         if (dude.folded == false && dude.credit > 0 && dude != this && (this.credit - this.curr) > 0)
                             dude.curr += this.credit - this.curr;
+                    }
+                    if (Game.peeps.Where(dude=> dude.folded == false && dude.credit > 0 && dude != this && (this.credit - this.curr) > 0).Count() > 0)
+                    {
+                        Game.fullamt += this.credit;
+
                     }
                     this.credit = 0;
                     goto Donezo;
@@ -94,11 +99,11 @@ namespace ConsoleApp26
                 if (this.player == false && Game.ante < (int)(this.credit / (3 - Game.rounds * ((double)(1 / 2)))))
                 {
                     temp = ran.Next(Game.ante, (int)(this.credit / (3 - Game.rounds * ((double)(1 / 2)))));
-                } else if( Game.ante <= credit)
+                } else if( this.player == false && Game.ante <= credit)
                 {
                     temp = Game.ante;
                 }
-                else
+                else if (this.player == false)
                 {
                     temp = credit;
                 }
@@ -130,6 +135,7 @@ namespace ConsoleApp26
             this.curr = 0;
             Donezo:
             this.curr = 0;
+            Console.WriteLine(Game.fullamt);
         }
 
         public void Fold()
@@ -481,6 +487,7 @@ namespace ConsoleApp26
         }
         public static void RoundStart()
         {
+            Game.fullamt = ante + 30;
             deck = new List<string>();
             foreach (char suite in suits)
             {
@@ -611,8 +618,8 @@ namespace ConsoleApp26
                     {
                         if (peeps.Where(ip => new PokerHand(string.Join(" ", outof.cards.Concat(Game.board))).CompareWith(new PokerHand(string.Join(" ", ip.cards.Concat(Game.board)))) == Result.Loss).Count() == 0)
                         {
-                            outof.credit += peeps.Select(plo => plo.inpot >= outof.inpot ? outof.inpot : plo.inpot - (outof.inpot - plo.inpot)).Sum();
-                            Game.pot -= peeps.Select(plo => plo.inpot >= outof.inpot ? outof.inpot : plo.inpot - (outof.inpot - plo.inpot)).Sum();
+                            outof.credit += peeps.Select(plo => plo.inpot <= outof.inpot ? plo.inpot : plo.inpot - (outof.inpot - plo.inpot)).Sum();
+                            Game.pot -= peeps.Select(plo => plo.inpot >= outof.inpot ? plo.inpot : plo.inpot - (outof.inpot - plo.inpot)).Sum();
                             Console.WriteLine(outof.name + "won" + peeps.Select(plo => plo.inpot >= outof.inpot ? outof.inpot : plo.inpot - (outof.inpot - plo.inpot)).Sum());
                             outof.folded = true;
                         }
