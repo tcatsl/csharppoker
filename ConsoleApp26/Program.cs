@@ -280,13 +280,13 @@ namespace ConsoleApp26
         }
         public void AI()
         {
-            
+            this.odds = this.Ponder();
             if  (Game.peeps.Where(loc => loc.folded == false && loc != this && loc.credit > 0).Count() < 1 && this.curr == 0)
             {
                 this.Check();
                 return;
             }
-            this.odds = this.Ponder();
+            
             if (this.credit <= 0)
             {
                 this.Check();
