@@ -77,6 +77,7 @@ namespace ConsoleApp26
         {
             int plin = Game.peeps.Where(per => per.folded == false).Count();
             turn = 1;
+            
             if (subround == 0)
             {
 
@@ -156,7 +157,10 @@ namespace ConsoleApp26
                 }
             }
             subround++;
-
+            foreach (Player de in peeps)
+            {
+                Console.WriteLine(de.name + " has " + de.inpot + " in the pot.");
+            }
             if (Game.peeps.Where(per => per.folded == false).Count() > 1 && subround < 4)
             {
                 System.Threading.Thread.Sleep(500); Console.WriteLine("*****next round of betting*****");
@@ -185,7 +189,7 @@ namespace ConsoleApp26
                 {
                     foreach (Player outof in peeps.Where(peep1 => peep1.folded == false && peep1.inpot < fullamt).OrderBy(pl => pl.inpot).ToList())
                     {
-                        if (peeps.Where(ip => new PokerHand(string.Join(" ", outof.cards.Concat(Game.board))).CompareWith(new PokerHand(string.Join(" ", ip.cards.Concat(Game.board)))) == Result.Loss).Count() == 0)
+                        if (peeps.Where(ip => ip.folded == false && new PokerHand(string.Join(" ", outof.cards.Concat(Game.board))).CompareWith(new PokerHand(string.Join(" ", ip.cards.Concat(Game.board)))) == Result.Loss).Count() == 0)
                         {
                             outof.credit += peeps.Select(plo => plo.inpot <= outof.inpot ? plo.inpot : outof.inpot).Sum();
                             Game.pot -= peeps.Select(plo => plo.inpot <= outof.inpot ? plo.inpot : outof.inpot).Sum();
