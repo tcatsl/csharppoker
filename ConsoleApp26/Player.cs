@@ -1,0 +1,455 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace ConsoleApp26
+{
+    public class Player
+    {
+        public List<string> cards = new List<string>();
+        public int credit;
+        public int curr;
+        public bool folded;
+        public bool player;
+        public int inpot;
+        public string name;
+        public float odds;
+        public float tempwins;
+        public float iter;
+        public float wins;
+        Random ran;
+        public Player(bool play, string init, int cred)
+        {
+            this.name = init;
+            this.player = play;
+            this.credit = cred;
+            this.curr = 0;
+            this.folded = false;
+            this.inpot = 0;
+            this.wins = 0;
+            this.iter = 0;
+            this.odds = 0;
+            this.tempwins = 0;
+            this.odds = 0;
+            ran = new Random();
+
+        }
+        public void Bet(int amt)
+        {
+
+            int temp = amt;
+            if (temp >= credit)
+            {
+                temp = credit;
+            }
+
+            int maxValue = Game.peeps.Where(opp => opp != this && opp.folded == false && opp.credit > 0).Count() > 0 ? Game.peeps.Where(opp => opp != this && opp.folded == false).Select(unc => unc.credit).Max() : -1;
+            int maxIndex = Game.peeps.Select(unc => unc.credit).ToList().IndexOf(maxValue);
+            if (maxIndex != -1)
+            {
+                if (temp >= Game.peeps[maxIndex].credit)
+                {
+                    temp = Game.peeps[maxIndex].credit;
+                    Console.WriteLine(this.name + " puts everyone all in for " + temp + ".");
+                }
+            }
+            if (temp >= credit - curr)
+            {
+                Game.pot += this.credit;
+
+                Console.WriteLine(this.name + " goes all in for " + this.credit + ".");
+                this.inpot += this.credit;
+
+
+                foreach (Player dude in Game.peeps)
+                {
+                    if (dude.folded == false && dude.credit > 0 && dude != this && (this.credit - this.curr) > 0)
+                        dude.curr += this.credit - this.curr;
+                }
+                if (Game.peeps.Where(dude => dude.folded == false && dude.credit > 0 && dude != this && (this.credit - this.curr) > 0).Count() > 0)
+                {
+                    Game.fullamt += this.credit;
+
+                }
+                this.credit = 0;
+                goto Donezo;
+            }
+            Game.pot += this.curr;
+            this.inpot += this.curr;
+            this.credit -= this.curr;
+            int bettin = 0;
+            if (this.player == false && Game.ante < (int)(this.credit / (3 - Game.rounds * ((double)(1 / 2)))))
+            {
+                temp = ran.Next(Game.ante, (int)(this.credit / (3 - Game.rounds * ((double)(1 / 2)))));
+            }
+            else if (this.player == false && Game.ante <= credit)
+            {
+                temp = Game.ante;
+            }
+            else if (this.player == false)
+            {
+                temp = credit;
+            }
+            if (credit <= 0)
+            {
+                bettin = 0;
+                curr = 0;
+            }
+            if (temp != 0)
+                bettin = temp;
+            if (maxIndex != -1)
+            {
+                if (temp < Game.peeps[maxIndex].credit && !(temp >= credit))
+                {
+                    Console.WriteLine(this.name + " calls " + this.curr + " and raises " + bettin + ".");
+                }
+            }
+            this.credit -= bettin;
+            this.inpot += bettin;
+            Game.pot += bettin;
+            Game.fullamt += bettin;
+            foreach (Player dude in Game.peeps)
+            {
+                if (dude != this && dude.folded == false && dude.credit > 0)
+                    dude.curr += bettin;
+            }
+
+
+            this.curr = 0;
+            Donezo:
+            this.curr = 0;
+        }
+
+        public void Fold()
+        {
+            Console.WriteLine("XXXXXX0XXXXXXXXXXXXXXXXX0XXXXXX");
+            Console.WriteLine(this.name + " folds.");
+            this.folded = true;
+            this.curr = 0;
+        }
+        public void Call()
+        {
+            Console.WriteLine(this.name + " calls " + this.curr + ".");
+            Game.pot += this.curr;
+            this.credit -= this.curr;
+            this.inpot += this.curr;
+            this.curr = 0;
+        }
+        public void Check()
+        {
+            Console.WriteLine(this.name + " checks.");
+            this.curr = 0;
+        }
+        public void AllIn()
+        {
+
+            Bet(this.credit);
+
+        }
+        public void Ante()
+        {
+
+            int bettin = Game.ante;
+            Console.WriteLine(this.name + " is big blind and antes " + bettin + ".");
+            this.credit -= bettin;
+            this.inpot += bettin;
+            Game.pot += bettin;
+            foreach (Player dude in Game.peeps)
+            {
+                if (dude != this && dude.folded == false)
+                    dude.curr = Game.ante - dude.inpot;
+            }
+
+            this.curr = 0;
+            Console.WriteLine("Pot: " + Game.pot);
+        }
+        public void SmallAnte()
+        {
+
+            int bettin = Game.ante / 2;
+            Console.WriteLine(this.name + " is small blind and antes " + bettin + ".");
+            this.credit -= bettin;
+            this.inpot += bettin;
+            Game.pot += bettin;
+            foreach (Player dude in Game.peeps)
+            {
+                if (dude != this && dude.folded == false)
+                    dude.curr = Game.ante - dude.inpot;
+            }
+
+            this.curr = Game.ante / 2;
+            Console.WriteLine("Pot: " + Game.pot);
+        }
+        public void Win()
+        {
+            this.credit += Game.pot;
+            Game.pot = 0;
+        }
+        public void Act()
+        {
+            if (this.player == false)
+            {
+                this.AI();
+            }
+            else if (this.player == true)
+            {
+                this.NotAI();
+            }
+        }
+        public void Reset()
+        {
+            this.wins = 0;
+            this.tempwins = 0;
+            this.odds = 0;
+            this.iter = 0;
+        }
+        public float Ponder()
+        {
+            Console.WriteLine(this.name + " is thinking.");
+            this.Reset();
+            if (this.cards.Count() > 0)
+            {
+
+                return this.Speculate();
+            }
+            else
+            {
+                return (float)0.33;
+            }
+        }
+        public float Speculate()
+        {
+            this.tempwins = this.wins;
+            if (this.TryWin())
+            {
+                this.wins++;
+            }
+            this.iter++;
+
+            return (float)(Math.Abs(((double)tempwins / (iter + 1) - (double)wins / iter)) < 0.00005 && iter > 100 ? (double)(wins / iter) : this.Speculate());
+        }
+        public bool TryWin()
+        {
+            int trywins = 0;
+            List<string> tempcards = new List<string>();
+            List<List<string>> oppcards = new List<List<string>>();
+
+            List<string> tempdeck = new List<string>(Game.deck.Concat(Game.peeps.Where(peeper => peeper != this).Select(io => io.cards).SelectMany(i => i)));
+
+            for (int u = 0; u < Game.peeps.Where(mip => mip != this).Count(); u++)
+            {
+                List<string> tempc = new List<string>();
+                for (int im = 0; im < 2; im++)
+                {
+                    int dex2 = this.ran.Next(0, tempdeck.Count());
+                    tempc.Add(tempdeck[dex2]);
+                    tempdeck.RemoveAt(dex2);
+                }
+                oppcards.Add(tempc);
+            }
+            for (var f = 0; f < 5 - Game.board.Count(); f++)
+            {
+                int dex = this.ran.Next(0, tempdeck.Count());
+                tempcards.Add(tempdeck[dex]);
+                tempdeck.RemoveAt(dex);
+            }
+            for (int u = 0; u < Game.peeps.Count() - Game.peeps.Where(pl => pl == this || pl.folded == true).Count(); u++)
+
+            {
+                List<string> opp = oppcards[u];
+                trywins += new PokerHand(string.Join(" ", this.cards.Concat(Game.board).Concat(tempcards))).CompareWith(new PokerHand(string.Join(" ", tempcards.Concat(Game.board).Concat(opp)))) == Result.Win ? 1 : 0;
+            }
+            return trywins == Game.peeps.Where(mip => mip.folded == false && mip != this).Count();
+
+
+        }
+        public void AI()
+        {
+            this.odds = this.Ponder();
+            if (Game.peeps.Where(loc => loc.folded == false && loc != this && loc.credit > 0).Count() < 1 && this.curr == 0)
+            {
+                this.Check();
+                return;
+            }
+
+            if (this.credit <= 0)
+            {
+                this.Check();
+                return;
+            }
+            if (this.curr == 0)
+            {
+                if (this.ran.Next(1, 21) > 16 || odds >= 0.5109 && this.ran.Next(0, 22) > 10)
+                {
+                    this.Bet(0);
+                    return;
+                }
+                else
+                {
+                    this.Check();
+                    return;
+                }
+            }
+            if (this.curr < this.credit)
+            {
+
+                int res = this.ran.Next(0, 20);
+                if (res > 17 || (this.odds >= 0.5509) && res > 8)
+                {
+                    this.Bet(0);
+                    return;
+                }
+                if (res >= 12 || (this.odds >= 0.5 && res > 5))
+                {
+                    this.Call();
+                    return;
+                }
+                this.Fold();
+                return;
+            }
+            if (this.ran.Next(1, 20) > 15 || this.odds >= 0.6 || this.credit < Game.ante + 30)
+            {
+                this.AllIn();
+                return;
+            }
+            else
+            {
+                this.Fold();
+                return;
+            }
+        }
+        public void NotAI()
+        {
+            this.odds = this.Ponder();
+            Console.WriteLine((this.cards.Count() > 0 ? (int)(this.odds * 100) : 33) + "% chance of winning");
+
+            if (this.folded == true)
+                return;
+            if (this.credit <= 0 || Game.peeps.Where(ok => ok.credit > 0 && !ok.folded && ok != this).Count() < 1)
+            {
+                this.Check();
+                return;
+            }
+            if (this.curr == 0)
+            {
+                Console.WriteLine("pot: " + Game.pot);
+                Console.WriteLine("current bet: " + this.curr);
+                Console.WriteLine("bet, or check?");
+                string act = Console.ReadLine();
+
+                if (act == "bet")
+                {
+                    int c;
+
+                    Rebet:
+                    {
+                        Console.WriteLine("bet how much?");
+                        string inp = Console.ReadLine();
+                        int y = 0;
+                        bool succ = Int32.TryParse(inp, out y);
+                        if (succ)
+                        {
+
+
+                            c = Int32.Parse(inp);
+                            if (c >= Game.ante && c <= this.credit)
+                            {
+                                this.Bet(c);
+                                return;
+                            }
+                            else
+                            {
+                                Console.WriteLine("minimum bet is " + Game.ante + ". maximum is " + (this.credit - this.curr) + ".");
+                                this.NotAI();
+                            }
+                        }
+                        else
+                        {
+                            goto Rebet;
+                        }
+                    }
+                }
+                else if (act == "check")
+                    this.Check();
+                else
+                {
+                    Console.WriteLine("not a valid option.");
+                    this.NotAI();
+                }
+            }
+            else if (this.curr <= this.credit)
+            {
+                Console.WriteLine("pot: " + Game.pot);
+                Console.WriteLine("current bet: " + this.curr);
+                Console.WriteLine("bet, fold, or call?");
+                string act = Console.ReadLine();
+                if (act == "bet")
+                {
+                    int c;
+
+                    Rebet:
+                    {
+                        Console.WriteLine("bet how much?");
+                        string inp = Console.ReadLine();
+                        int y = 0;
+                        bool succ = Int32.TryParse(inp, out y);
+                        if (succ)
+                        {
+
+
+                            c = Int32.Parse(inp);
+                            if (c >= Game.ante && c <= this.credit)
+                            {
+                                this.Bet(c);
+                                return;
+                            }
+                            else
+                            {
+                                Console.WriteLine("minimum bet is " + Game.ante + ". maximum is " + (this.credit - this.curr) + ".");
+                                this.NotAI();
+                            }
+                        }
+                        else
+                        {
+                            goto Rebet;
+                        }
+                    }
+                }
+                else if (act == "call")
+                    this.Call();
+                else if (act == "fold")
+                    this.Fold();
+                else
+                {
+                    Console.WriteLine("not a valid option");
+                    this.NotAI();
+                }
+            }
+            else
+
+            {
+                Console.WriteLine("pot: " + Game.pot);
+                Console.WriteLine("current bet: " + this.curr);
+                Console.WriteLine("fold or all in?");
+                string act = Console.ReadLine();
+                if (act == "fold")
+                {
+                    this.Fold();
+                }
+                else if (act == "all in")
+                {
+                    this.AllIn();
+                }
+                else
+                {
+                    Console.WriteLine("not a valid option.");
+                    this.NotAI();
+                }
+            }
+
+            Console.WriteLine("balance: " + this.credit);
+        }
+    }
+}
