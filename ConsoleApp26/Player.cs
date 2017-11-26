@@ -19,6 +19,10 @@ namespace ConsoleApp26
         public float tempwins;
         public float iter;
         public float wins;
+        public float lossodds;
+        public int temploss;
+        public int iterloss;
+        public int loss;
         Random ran;
         public Player(bool play, string init, int cred)
         {
@@ -27,6 +31,10 @@ namespace ConsoleApp26
             this.credit = cred;
             this.curr = 0;
             this.folded = false;
+            this.loss = 0;
+            this.temploss = 0;
+            this.iterloss = 0;
+            this.lossodds = 0;
             this.inpot = 0;
             this.wins = 0;
             this.iter = 0;
@@ -205,30 +213,108 @@ namespace ConsoleApp26
             this.odds = 0;
             this.iter = 0;
         }
-        public float Ponder()
+        public void ResetLoss()
+        {
+            this.loss = 0;
+            this.temploss = 0;
+            this.lossodds = 0;
+            this.iterloss = 0;
+        }
+        public float Ponder(Result whelp)
         {
             System.Threading.Thread.Sleep(500); Console.WriteLine(this.name + " is thinking.");
             this.Reset();
             if (this.cards.Count() > 0)
             {
 
-                return this.Speculate();
+                return this.Speculate(whelp);
             }
             else
             {
                 return (float)0.33;
             }
         }
-        public float Speculate()
+        public float PonderLoss()
+        {
+            System.Threading.Thread.Sleep(500); Console.WriteLine(this.name + " is thinking.");
+            this.ResetLoss();
+                return this.SpeculateLoss();
+            
+        }
+        public float Speculate(Result hmm)
         {
             this.tempwins = this.wins;
+            if (hmm == Result.Loss)
+            {
+                if (this.TryLoss())
+                {
+                   
+                    this.wins++;
+                }
+                this.iter++;
+            } else if (hmm == Result.Win)
+            {
+                if (this.TryWin())
+                {
+                    this.wins++;
+                }
+                this.iter++;
+            } else
+            {
+                if (this.TryTie())
+                {
+                    this.wins++;
+                }
+                this.iter++;
+            }
+
+            return (float)(Math.Abs(((double)wins / (iter + 1) - (double)tempwins / iter)) < 0.00005 && iter > 10000 ? (double)(tempwins / iter) : this.Speculate(hmm));
+        }
+        public float SpeculateLoss()
+        {
+            this.temploss = this.loss;
             if (this.TryWin())
             {
-                this.wins++;
+                this.loss++;
             }
-            this.iter++;
+            this.iterloss++;
 
-            return (float)(Math.Abs(((double)tempwins / (iter + 1) - (double)wins / iter)) < 0.00005 && iter > 100 ? (double)(wins / iter) : this.Speculate());
+            return (float)(Math.Abs(((double)loss / (iterloss + 1) - (double)temploss / loss)) < 0.00005 && iterloss > 100 ? (double)(temploss / iterloss) : this.SpeculateLoss());
+        }
+        public bool TryTie()
+        {
+            int trywins = 0;
+            List<string> tempcards = new List<string>();
+            List<List<string>> oppcards = new List<List<string>>();
+
+            List<string> tempdeck = new List<string>(Game.deck.Concat(Game.peeps.Where(peeper => peeper != this).Select(io => io.cards).SelectMany(i => i)));
+
+            for (int u = 0; u < Game.peeps.Where(mip => mip != this).Count(); u++)
+            {
+                List<string> tempc = new List<string>();
+                for (int im = 0; im < 2; im++)
+                {
+                    int dex2 = this.ran.Next(0, tempdeck.Count());
+                    tempc.Add(tempdeck[dex2]);
+                    tempdeck.RemoveAt(dex2);
+                }
+                oppcards.Add(tempc);
+            }
+            for (var f = 0; f < 5 - Game.board.Count(); f++)
+            {
+                int dex = this.ran.Next(0, tempdeck.Count());
+                tempcards.Add(tempdeck[dex]);
+                tempdeck.RemoveAt(dex);
+            }
+            for (int u = 0; u < Game.peeps.Count() - Game.peeps.Where(pl => pl == this || pl.folded == true).Count(); u++)
+
+            {
+                List<string> opp = oppcards[u];
+                trywins += new PokerHand(string.Join(" ", this.cards.Concat(Game.board).Concat(tempcards))).CompareWith(new PokerHand(string.Join(" ", tempcards.Concat(Game.board).Concat(opp)))) == Result.Tie ? 1 : 0;
+            }
+            return trywins == Game.peeps.Where(mip => mip.folded == false && mip != this).Count();
+
+
         }
         public bool TryWin()
         {
@@ -265,9 +351,44 @@ namespace ConsoleApp26
 
 
         }
+        public bool TryLoss()
+        {
+            int tryloss = 0;
+            List<string> tempcards = new List<string>();
+            List<List<string>> oppcards = new List<List<string>>();
+
+            List<string> tempdeck = new List<string>(Game.deck.Concat(Game.peeps.Where(peeper => peeper != this).Select(io => io.cards).SelectMany(i => i)));
+
+            for (int u = 0; u < Game.peeps.Where(mip => mip != this).Count(); u++)
+            {
+                List<string> tempc = new List<string>();
+                for (int im = 0; im < 2; im++)
+                {
+                    int dex2 = this.ran.Next(0, tempdeck.Count());
+                    tempc.Add(tempdeck[dex2]);
+                    tempdeck.RemoveAt(dex2);
+                }
+                oppcards.Add(tempc);
+            }
+            for (var f = 0; f < 5 - Game.board.Count(); f++)
+            {
+                int dex = this.ran.Next(0, tempdeck.Count());
+                tempcards.Add(tempdeck[dex]);
+                tempdeck.RemoveAt(dex);
+            }
+            for (int u = 0; u < Game.peeps.Count() - Game.peeps.Where(pl => pl == this || pl.folded == true).Count(); u++)
+
+            {
+                List<string> opp = oppcards[u];
+                tryloss += new PokerHand(string.Join(" ", this.cards.Concat(Game.board).Concat(tempcards))).CompareWith(new PokerHand(string.Join(" ", tempcards.Concat(Game.board).Concat(opp)))) == Result.Loss ? 1 : 0;
+            }
+            return tryloss > 0;
+
+
+        }
         public void AI()
         {
-            this.odds = this.Ponder();
+            this.odds = this.Ponder(Result.Win);
             if (Game.peeps.Where(loc => loc.folded == false && loc != this && loc.credit > 0).Count() < 1 && this.curr == 0)
             {
                 this.Check();
@@ -327,8 +448,13 @@ namespace ConsoleApp26
         }
         public void NotAI()
         {
-            this.odds = this.Ponder();
-            System.Threading.Thread.Sleep(500); Console.WriteLine((this.cards.Count() > 0 ? (int)(this.odds * 100) : 33) + "% chance of winning");
+            this.odds = this.Ponder(Result.Win);
+            System.Threading.Thread.Sleep(500); Console.WriteLine((this.odds * 100) + "% chance of winning");
+
+            this.odds = this.Ponder(Result.Loss);
+            System.Threading.Thread.Sleep(500); Console.WriteLine( (this.odds * 100) + "% chance of losing");
+            this.odds = this.Ponder(Result.Tie);
+            System.Threading.Thread.Sleep(500); Console.WriteLine((this.odds * 100) + "% chance of tie");
 
             if (this.folded == true)
                 return;
