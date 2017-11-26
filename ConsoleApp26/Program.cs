@@ -67,14 +67,14 @@ namespace ConsoleApp26
                     if (temp >= Game.peeps[maxIndex].credit)
                     {
                         temp = Game.peeps[maxIndex].credit;
-                        Console.WriteLine(this.name + " puts everyone all in for " + temp );
+                        Console.WriteLine(this.name + " puts everyone all in for " + temp + ".");
                     }
                 }
                 if (temp >= credit - curr)
                 {
                     Game.pot += this.credit;
 
-                    Console.WriteLine(this.name + " goes all in for " + this.credit);
+                    Console.WriteLine(this.name + " goes all in for " + this.credit + ".");
                     this.inpot += this.credit;
                     
 
@@ -117,7 +117,7 @@ namespace ConsoleApp26
                 {
                     if (temp < Game.peeps[maxIndex].credit && !(temp >= credit))
                     {
-                        Console.WriteLine(this.name + " calls " + this.curr + " and raises " + bettin);
+                        Console.WriteLine(this.name + " calls " + this.curr + " and raises " + bettin + ".");
                     }
                 }
                 this.credit -= bettin;
@@ -139,13 +139,13 @@ namespace ConsoleApp26
         public void Fold()
         {
             Console.WriteLine("XXXXXX0XXXXXXXXXXXXXXXXX0XXXXXX");
-            Console.WriteLine(this.name +" folds" );
+            Console.WriteLine(this.name +" folds." );
             this.folded = true;
             this.curr = 0;
         }
         public void Call()
         {
-            Console.WriteLine(this.name + " calls " + this.curr);
+            Console.WriteLine(this.name + " calls " + this.curr+".");
             Game.pot += this.curr;
             this.credit -= this.curr;
             this.inpot += this.curr;
@@ -153,7 +153,7 @@ namespace ConsoleApp26
         }
         public void Check()
         {
-            Console.WriteLine(this.name + " checks");
+            Console.WriteLine(this.name + " checks.");
             this.curr = 0;
         }
         public void AllIn()
@@ -166,7 +166,7 @@ namespace ConsoleApp26
         {
 
             int bettin = Game.ante;
-            Console.WriteLine(this.name + " is big blind and antes: " + bettin);
+            Console.WriteLine(this.name + " is big blind and antes " + bettin +".");
             this.credit -= bettin;
             this.inpot += bettin;
             Game.pot += bettin;
@@ -183,7 +183,7 @@ namespace ConsoleApp26
         {
 
             int bettin = Game.ante / 2;
-            Console.WriteLine(this.name + " is small blind and antes: " + bettin);
+            Console.WriteLine(this.name + " is small blind and antes " + bettin + ".");
             this.credit -= bettin;
             this.inpot += bettin;
             Game.pot += bettin;
@@ -221,7 +221,7 @@ namespace ConsoleApp26
         }
         public float Ponder()
         {
-            Console.WriteLine(this.name + " is thinking");
+            Console.WriteLine(this.name + " is thinking.");
             this.Reset();
             if (this.cards.Count() > 0)
             {
@@ -347,8 +347,8 @@ namespace ConsoleApp26
             }
             if (this.curr == 0)
             {
-                Console.WriteLine("Pot: " + Game.pot);
-                Console.WriteLine("Current Bet: " + this.curr);
+                Console.WriteLine("pot: " + Game.pot);
+                Console.WriteLine("current bet: " + this.curr);
                 Console.WriteLine("bet, or check?");
                 string act = Console.ReadLine();
 
@@ -358,7 +358,7 @@ namespace ConsoleApp26
 
                     Rebet:
                     {
-                        Console.WriteLine("Bet how much?");
+                        Console.WriteLine("bet how much?");
                         string inp = Console.ReadLine();
                         int y = 0;
                         bool succ = Int32.TryParse(inp, out y);
@@ -374,7 +374,7 @@ namespace ConsoleApp26
                             }
                             else
                             {
-                                Console.WriteLine("minimum bet is: " + Game.ante + ". maximum is: " + (this.credit - this.curr) + ".");
+                                Console.WriteLine("minimum bet is " + Game.ante + ". maximum is " + (this.credit - this.curr) + ".");
                                 this.NotAI();
                             }
                         }
@@ -388,14 +388,14 @@ namespace ConsoleApp26
                     this.Check();
                 else
                 {
-                    Console.WriteLine("not a valid option");
+                    Console.WriteLine("not a valid option.");
                     this.NotAI();
                 }
             }
             else if (this.curr <= this.credit)
             {
-                Console.WriteLine("Pot: " + Game.pot);
-                Console.WriteLine("Current Bet: " + this.curr);
+                Console.WriteLine("pot: " + Game.pot);
+                Console.WriteLine("current bet: " + this.curr);
                 Console.WriteLine("bet, fold, or call?");
                 string act = Console.ReadLine();
                 if (act == "bet")
@@ -404,7 +404,7 @@ namespace ConsoleApp26
 
                     Rebet:
                     {
-                        Console.WriteLine("Bet how much?");
+                        Console.WriteLine("bet how much?");
                         string inp = Console.ReadLine();
                         int y = 0;
                         bool succ = Int32.TryParse(inp, out y);
@@ -419,7 +419,7 @@ namespace ConsoleApp26
                                 return;
                             } else
                             {
-                                Console.WriteLine("minimum bet is: " + Game.ante+". maximum is: "+(this.credit - this.curr)+".");
+                                Console.WriteLine("minimum bet is " + Game.ante+". maximum is "+(this.credit - this.curr)+".");
                                 this.NotAI();
                             }
                         } else
@@ -441,8 +441,8 @@ namespace ConsoleApp26
             else
 
             {
-                Console.WriteLine("Pot: " + Game.pot);
-                Console.WriteLine("Current Bet: " + this.curr);
+                Console.WriteLine("pot: " + Game.pot);
+                Console.WriteLine("current bet: " + this.curr);
                 Console.WriteLine("fold or all in?");
                 string act = Console.ReadLine();
                 if (act == "fold")
@@ -455,12 +455,12 @@ namespace ConsoleApp26
                 }
                 else
                 {
-                    Console.WriteLine("not a valid option");
+                    Console.WriteLine("not a valid option.");
                     this.NotAI();
                 }
             }
 
-            Console.WriteLine("Balance: " + this.credit);
+            Console.WriteLine("balance: " + this.credit);
         }
     }
     public enum Result
@@ -607,8 +607,8 @@ namespace ConsoleApp26
                     
                     one2.Act();
 
-                    Console.WriteLine("Ending Balance: " + one2.credit);
-                    Console.WriteLine("Pot: " + Game.pot);
+                    Console.WriteLine("ending balance: " + one2.credit);
+                    Console.WriteLine("pot: " + Game.pot);
                     Console.WriteLine("___________turn_end____________");
                 }
             }
@@ -639,13 +639,13 @@ namespace ConsoleApp26
                     split = true;
                 }
                 if (split == true)
-                { foreach (Npc outof in peeps.Where(peep1 => peep1.folded == false && peep1.inpot < fullamt).OrderBy(pl=> pl.inpot).Reverse().ToList())
+                { foreach (Npc outof in peeps.Where(peep1 => peep1.folded == false && peep1.inpot < fullamt).OrderBy(pl=> pl.inpot).ToList())
                     {
                         if (peeps.Where(ip => new PokerHand(string.Join(" ", outof.cards.Concat(Game.board))).CompareWith(new PokerHand(string.Join(" ", ip.cards.Concat(Game.board)))) == Result.Loss).Count() == 0)
                         {
                             outof.credit += peeps.Select(plo => plo.inpot <= outof.inpot ? plo.inpot : outof.inpot).Sum();
                             Game.pot -= peeps.Select(plo => plo.inpot <= outof.inpot ? plo.inpot : outof.inpot).Sum();
-                            Console.WriteLine(outof.name + " won: " + peeps.Select(plo => plo.inpot <= outof.inpot ? plo.inpot : outof.inpot).Sum());
+                            Console.WriteLine(outof.name + " won " + peeps.Select(plo => plo.inpot <= outof.inpot ? plo.inpot : outof.inpot).Sum() + ".");
 
 
                             foreach (Npc lk in peeps.Where(ml=>ml.folded = false && ml != outof))
