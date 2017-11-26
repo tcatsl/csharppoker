@@ -70,7 +70,7 @@ namespace ConsoleApp26
                         Console.WriteLine(this.name + " puts everyone all in for " + temp );
                     }
                 }
-                if (temp >= credit)
+                if (temp >= credit - curr)
                 {
                     Game.pot += this.credit;
 
@@ -284,6 +284,11 @@ namespace ConsoleApp26
         }
         public void AI()
         {
+            if  (Game.peeps.Where(loc => loc.folded == false && loc != this && loc.credit > 0).Count() < 1)
+            {
+                this.Check();
+                return;
+            }
             this.odds = this.Ponder();
             if (this.credit <= 0)
             {
