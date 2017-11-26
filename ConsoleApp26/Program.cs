@@ -454,7 +454,7 @@ namespace ConsoleApp26
     {
         public static int fullamt = 0;
         public static List<string> playercards = new List<string>();
-        public static List<Npc> peeps = new List<Npc> { new Npc(false, "knuckles", 5000), new Npc(false, "Dante", 10000), new Npc(false, "Jeanne", 8000) };
+        public static List<Npc> peeps = new List<Npc> { new Npc(false, "knuckles", 2000), new Npc(false, "Dante", 2000), new Npc(false, "Jeanne", 2000) };
         public static Random ran2 = new Random();
         public static int pot = 0;
         public static int ante = 50;
@@ -470,7 +470,7 @@ namespace ConsoleApp26
             Console.WriteLine("$$$$$$$$$$$$new game$$$$$$$$$$$");
             Console.WriteLine("Whats your name?");
             namer = Console.ReadLine();
-            peeps.Add(new Npc(true, namer, 100000));
+            peeps.Add(new Npc(true, namer, 2000));
             foreach (Npc qq in peeps)
             {
                 pot = 0;
@@ -616,7 +616,6 @@ namespace ConsoleApp26
                 if (split == true)
                 { foreach (Npc outof in peeps.Where(peep1 => peep1.folded == false && peep1.inpot < fullamt).OrderBy(pl=> pl.inpot).Reverse().ToList())
                     {
-                        Console.WriteLine(outof.inpot);
                         if (peeps.Where(ip => new PokerHand(string.Join(" ", outof.cards.Concat(Game.board))).CompareWith(new PokerHand(string.Join(" ", ip.cards.Concat(Game.board)))) == Result.Loss).Count() == 0)
                         {
                             outof.credit += peeps.Select(plo => plo.inpot <= outof.inpot ? plo.inpot : outof.inpot).Sum();
