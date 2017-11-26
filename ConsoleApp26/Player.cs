@@ -52,14 +52,14 @@ namespace ConsoleApp26
                 if (temp >= Game.peeps[maxIndex].credit)
                 {
                     temp = Game.peeps[maxIndex].credit;
-                    Console.WriteLine(this.name + " puts everyone all in for " + temp + ".");
+                    System.Threading.Thread.Sleep(500); Console.WriteLine(this.name + " puts everyone all in for " + temp + ".");
                 }
             }
             if (temp >= credit - curr)
             {
                 Game.pot += this.credit;
 
-                Console.WriteLine(this.name + " goes all in for " + this.credit + ".");
+                System.Threading.Thread.Sleep(500); Console.WriteLine(this.name + " goes all in for " + this.credit + ".");
                 this.inpot += this.credit;
 
 
@@ -103,7 +103,7 @@ namespace ConsoleApp26
             {
                 if (temp < Game.peeps[maxIndex].credit && !(temp >= credit))
                 {
-                    Console.WriteLine(this.name + " calls " + this.curr + " and raises " + bettin + ".");
+                    System.Threading.Thread.Sleep(500); Console.WriteLine(this.name + " calls " + this.curr + " and raises " + bettin + ".");
                 }
             }
             this.credit -= bettin;
@@ -124,14 +124,14 @@ namespace ConsoleApp26
 
         public void Fold()
         {
-            Console.WriteLine("XXXXXX0XXXXXXXXXXXXXXXXX0XXXXXX");
-            Console.WriteLine(this.name + " folds.");
+            System.Threading.Thread.Sleep(500); Console.WriteLine("XXXXXX0XXXXXXXXXXXXXXXXX0XXXXXX");
+            System.Threading.Thread.Sleep(500); Console.WriteLine(this.name + " folds.");
             this.folded = true;
             this.curr = 0;
         }
         public void Call()
         {
-            Console.WriteLine(this.name + " calls " + this.curr + ".");
+            System.Threading.Thread.Sleep(500); Console.WriteLine(this.name + " calls " + this.curr + ".");
             Game.pot += this.curr;
             this.credit -= this.curr;
             this.inpot += this.curr;
@@ -139,7 +139,7 @@ namespace ConsoleApp26
         }
         public void Check()
         {
-            Console.WriteLine(this.name + " checks.");
+            System.Threading.Thread.Sleep(500); Console.WriteLine(this.name + " checks.");
             this.curr = 0;
         }
         public void AllIn()
@@ -152,7 +152,7 @@ namespace ConsoleApp26
         {
 
             int bettin = Game.ante;
-            Console.WriteLine(this.name + " is big blind and antes " + bettin + ".");
+            System.Threading.Thread.Sleep(500); Console.WriteLine(this.name + " is big blind and antes " + bettin + ".");
             this.credit -= bettin;
             this.inpot += bettin;
             Game.pot += bettin;
@@ -163,13 +163,13 @@ namespace ConsoleApp26
             }
 
             this.curr = 0;
-            Console.WriteLine("Pot: " + Game.pot);
+            System.Threading.Thread.Sleep(500); Console.WriteLine("Pot: " + Game.pot);
         }
         public void SmallAnte()
         {
 
             int bettin = Game.ante / 2;
-            Console.WriteLine(this.name + " is small blind and antes " + bettin + ".");
+            System.Threading.Thread.Sleep(500); Console.WriteLine(this.name + " is small blind and antes " + bettin + ".");
             this.credit -= bettin;
             this.inpot += bettin;
             Game.pot += bettin;
@@ -180,7 +180,7 @@ namespace ConsoleApp26
             }
 
             this.curr = Game.ante / 2;
-            Console.WriteLine("Pot: " + Game.pot);
+            System.Threading.Thread.Sleep(500); Console.WriteLine("Pot: " + Game.pot);
         }
         public void Win()
         {
@@ -207,7 +207,7 @@ namespace ConsoleApp26
         }
         public float Ponder()
         {
-            Console.WriteLine(this.name + " is thinking.");
+            System.Threading.Thread.Sleep(500); Console.WriteLine(this.name + " is thinking.");
             this.Reset();
             if (this.cards.Count() > 0)
             {
@@ -323,7 +323,7 @@ namespace ConsoleApp26
         public void NotAI()
         {
             this.odds = this.Ponder();
-            Console.WriteLine((this.cards.Count() > 0 ? (int)(this.odds * 100) : 33) + "% chance of winning");
+            System.Threading.Thread.Sleep(500); Console.WriteLine((this.cards.Count() > 0 ? (int)(this.odds * 100) : 33) + "% chance of winning");
 
             if (this.folded == true)
                 return;
@@ -334,9 +334,9 @@ namespace ConsoleApp26
             }
             if (this.curr == 0)
             {
-                Console.WriteLine("pot: " + Game.pot);
-                Console.WriteLine("current bet: " + this.curr);
-                Console.WriteLine("bet, or check?");
+                System.Threading.Thread.Sleep(500); Console.WriteLine("pot: " + Game.pot);
+                System.Threading.Thread.Sleep(500); Console.WriteLine("current bet: " + this.curr);
+                System.Threading.Thread.Sleep(500); Console.WriteLine("bet, or check?");
                 string act = Console.ReadLine();
 
                 if (act == "bet")
@@ -345,7 +345,7 @@ namespace ConsoleApp26
 
                     Rebet:
                     {
-                        Console.WriteLine("bet how much?");
+                        System.Threading.Thread.Sleep(500); Console.WriteLine("bet how much?");
                         string inp = Console.ReadLine();
                         int y = 0;
                         bool succ = Int32.TryParse(inp, out y);
@@ -361,7 +361,7 @@ namespace ConsoleApp26
                             }
                             else
                             {
-                                Console.WriteLine("minimum bet is " + Game.ante + ". maximum is " + (this.credit - this.curr) + ".");
+                                System.Threading.Thread.Sleep(500); Console.WriteLine("minimum bet is " + Game.ante + ". maximum is " + (this.credit - this.curr) + ".");
                                 this.NotAI();
                             }
                         }
@@ -375,15 +375,15 @@ namespace ConsoleApp26
                     this.Check();
                 else
                 {
-                    Console.WriteLine("not a valid option.");
+                    System.Threading.Thread.Sleep(500); Console.WriteLine("not a valid option.");
                     this.NotAI();
                 }
             }
             else if (this.curr <= this.credit)
             {
-                Console.WriteLine("pot: " + Game.pot);
-                Console.WriteLine("current bet: " + this.curr);
-                Console.WriteLine("bet, fold, or call?");
+                System.Threading.Thread.Sleep(500); Console.WriteLine("pot: " + Game.pot);
+                System.Threading.Thread.Sleep(500); Console.WriteLine("current bet: " + this.curr);
+                System.Threading.Thread.Sleep(500); Console.WriteLine("bet, fold, or call?");
                 string act = Console.ReadLine();
                 if (act == "bet")
                 {
@@ -391,7 +391,7 @@ namespace ConsoleApp26
 
                     Rebet:
                     {
-                        Console.WriteLine("bet how much?");
+                        System.Threading.Thread.Sleep(500); Console.WriteLine("bet how much?");
                         string inp = Console.ReadLine();
                         int y = 0;
                         bool succ = Int32.TryParse(inp, out y);
@@ -407,7 +407,7 @@ namespace ConsoleApp26
                             }
                             else
                             {
-                                Console.WriteLine("minimum bet is " + Game.ante + ". maximum is " + (this.credit - this.curr) + ".");
+                                System.Threading.Thread.Sleep(500); Console.WriteLine("minimum bet is " + Game.ante + ". maximum is " + (this.credit - this.curr) + ".");
                                 this.NotAI();
                             }
                         }
@@ -423,16 +423,16 @@ namespace ConsoleApp26
                     this.Fold();
                 else
                 {
-                    Console.WriteLine("not a valid option");
+                    System.Threading.Thread.Sleep(500); Console.WriteLine("not a valid option");
                     this.NotAI();
                 }
             }
             else
 
             {
-                Console.WriteLine("pot: " + Game.pot);
-                Console.WriteLine("current bet: " + this.curr);
-                Console.WriteLine("fold or all in?");
+                System.Threading.Thread.Sleep(500); Console.WriteLine("pot: " + Game.pot);
+                System.Threading.Thread.Sleep(500); Console.WriteLine("current bet: " + this.curr);
+                System.Threading.Thread.Sleep(500); Console.WriteLine("fold or all in?");
                 string act = Console.ReadLine();
                 if (act == "fold")
                 {
@@ -444,12 +444,10 @@ namespace ConsoleApp26
                 }
                 else
                 {
-                    Console.WriteLine("not a valid option.");
+                    System.Threading.Thread.Sleep(500); Console.WriteLine("not a valid option.");
                     this.NotAI();
                 }
             }
-
-            Console.WriteLine("balance: " + this.credit);
         }
     }
 }

@@ -107,7 +107,7 @@ namespace ConsoleApp26
 
             }
             bool straightflush = pok.straight && pok.flush && pok.straightArr.ToList().OrderBy(group => Array.IndexOf(customOrder, group)).SequenceEqual(pok.arr.Where(suit1 => pok.arr.Where(suit2 => suit1[1] == suit2[1]).Count() >= 5).Select(card => card[0]).OrderBy(group => Array.IndexOf(customOrder, group)).Take(5).ToArray());
-            //Console.WriteLine(straightflush);
+            //System.Threading.Thread.Sleep(500); Console.WriteLine(straightflush);
             if (pok.flush == true && pok.straight == false)
             {
                 pok.straightArr = pok.arr.Where(suit1 => pok.arr.Where(suit2 => suit1[1] == suit2[1]).Count() >= 5).Select(card => card[0]).OrderBy(group => Array.IndexOf(customOrder, group)).Take(5).ToArray();
@@ -124,7 +124,7 @@ namespace ConsoleApp26
                     .ThenBy(group => Array.IndexOf(customOrder, group.Number)).SelectMany(group => Enumerable.Repeat(group.Number, group.Count)).Take(5).ToArray();
             }
             //generate binary hand reduction for easy scoring
-            //Console.WriteLine(pok.straight);
+            //System.Threading.Thread.Sleep(500); Console.WriteLine(pok.straight);
             pok.binwin = new int[] { straightflush ? 1 : 0, pok.four ? 1 : 0, pok.full ? 1 : 0, pok.flush ? 1 : 0, pok.straight ? 1 : 0, pok.trip ? 1 : 0, pok.twopair ? 1 : 0, pok.pair ? 1 : 0, 1 }; //high card is always true
 
         }
