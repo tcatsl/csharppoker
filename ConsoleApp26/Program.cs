@@ -53,8 +53,7 @@ namespace ConsoleApp26
         }
         public void Bet(int amt)
         {
-
-
+            
             int temp = amt;
             if (temp >= credit)
             {
@@ -304,7 +303,7 @@ namespace ConsoleApp26
                     return;
                 }
             }
-            if (this.curr <= this.credit)
+            if (this.curr < this.credit)
             {
                 
                 int res = this.ran.Next(1, 20);
@@ -552,14 +551,16 @@ namespace ConsoleApp26
 
             for (var u = 0; u < 99; u++)
             {
-                
+                if ((peeps.Where(mp => mp.folded == true).Count() >= peeps.Count() -1))
+                    break;
                 if ((peeps.Where(mp => mp.curr == 0).Count() == peeps.Count()) && turn > plin)
                     break;
                 foreach (Npc one2 in peeps.Where(per => per.folded == false).ToList())
                 {
                     if ((peeps.Where(mp => mp.curr == 0).Count() >= peeps.Count()) && turn > plin)
                         break;
-                    
+                    if ((peeps.Where(mp => mp.folded == true).Count() >= peeps.Count() - 1))
+                        break;
                     if (one2.cards.Count() == 0)
                     {
                         one2.cards = new List<string>();
@@ -615,6 +616,7 @@ namespace ConsoleApp26
                 if (split == true)
                 { foreach (Npc outof in peeps.Where(peep1 => peep1.folded == false && peep1.inpot < fullamt).OrderBy(pl=> pl.inpot).Reverse().ToList())
                     {
+                        Console.WriteLine(outof.inpot);
                         if (peeps.Where(ip => new PokerHand(string.Join(" ", outof.cards.Concat(Game.board))).CompareWith(new PokerHand(string.Join(" ", ip.cards.Concat(Game.board)))) == Result.Loss).Count() == 0)
                         {
                             outof.credit += peeps.Select(plo => plo.inpot <= outof.inpot ? plo.inpot : outof.inpot).Sum();
