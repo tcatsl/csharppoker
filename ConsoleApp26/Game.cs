@@ -29,7 +29,7 @@ namespace ConsoleApp26
             System.Threading.Thread.Sleep(500); Console.WriteLine("Whats your name?");
             namer = Console.ReadLine();
             Optola:
-            Console.WriteLine("play or spectate?");
+            Console.WriteLine("play, spectate or control all players?");
 
             string opt = Console.ReadLine();
             if (opt == "spectate")
@@ -38,7 +38,14 @@ namespace ConsoleApp26
             } else if (opt == "play")
             {
                 cree = 2500;
-            } else
+            } else if (opt == "control all players") {
+                cree = 2500;
+                foreach (Player cc in peeps)
+                {
+                    cc.player = true;
+                }
+            }
+            else
             {
                 Console.WriteLine("invalid option");
                 goto Optola;
@@ -159,6 +166,7 @@ namespace ConsoleApp26
 
 
                     System.Threading.Thread.Sleep(500); Console.WriteLine("__________turn_" + turn + "_start_________");
+                    Console.WriteLine(one2.name);
 
                     if (one2.player == true)
                     {

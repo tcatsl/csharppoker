@@ -440,8 +440,8 @@ namespace ConsoleApp26
         }
         public void NotAI()
         {
-            this.odds = this.Ponder(Result.Win);
-            System.Threading.Thread.Sleep(500); Console.WriteLine((this.odds * 100) + "% chance of winning");
+            //this.odds = this.Ponder(Result.Win);
+            ///System.Threading.Thread.Sleep(500); Console.WriteLine((this.odds * 100) + "% chance of winning");
 
             //this.odds = this.Ponder(Result.Loss);
             //System.Threading.Thread.Sleep(500); Console.WriteLine( (this.odds * 100) + "% chance of losing");
