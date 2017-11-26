@@ -394,7 +394,7 @@ namespace ConsoleApp26
             }
             if (this.curr == 0)
             {
-                if (this.ran.Next(1, 21) > 16 || odds >= 0.5109 && this.ran.Next(0, 22) > 10)
+                if (this.ran.Next(1, 21) > 15 || odds >= 0.5109 && this.ran.Next(0, 22) > 10)
                 {
                     this.Bet(0);
                     return;
@@ -409,12 +409,12 @@ namespace ConsoleApp26
             {
 
                 int res = this.ran.Next(0, 21);
-                if (res == 20 && this.odds > 0.3)
+                if (res == 20 && this.odds > 0.27)
                 {
                     this.AllIn();
                     return;
                 }
-                if (res > 17 || (this.odds >= 0.5509) && res > 8)
+                if (res > 15 || (this.odds >= 0.5509) && res > 8)
                 {
                     this.Bet(0);
                     return;
