@@ -8,7 +8,7 @@ namespace ConsoleApp26
 {
     public static class Game
     {
-        public static string version = "0.951";
+        public static string version = "0.952b";
         public static int fullamt = 0;
         public static List<string> playercards = new List<string>();
         public static List<Player> peeps = new List<Player> { new Player(false, "knuckles", 2000), new Player(false, "Dante", 2000), new Player(false, "Jeanne", 2000) };
