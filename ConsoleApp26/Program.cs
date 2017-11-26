@@ -34,11 +34,11 @@ namespace ConsoleApp26
         public float iter;
         public float wins;
         Random ran;
-        public Npc(bool play, string init)
+        public Npc(bool play, string init, int cred)
         {
             this.name = init;
             this.player = play;
-            this.credit = 2000;
+            this.credit = cred;
             this.curr = 0;
             this.folded = false;
             this.inpot = 0;
@@ -55,12 +55,11 @@ namespace ConsoleApp26
 
 
             int temp = amt;
-            if (temp > credit + curr)
+            if (temp >= credit)
             {
                 temp = credit;
             }
             
-            {
                 int maxValue = Game.peeps.Where(opp => opp != this && opp.folded == false && opp.credit > 0).Count() > 0 ? Game.peeps.Where(opp => opp != this && opp.folded == false).Select(unc => unc.credit).Max() : -1;
                 int maxIndex = Game.peeps.Select(unc => unc.credit).ToList().IndexOf(maxValue);
                 if (maxIndex != -1)
@@ -131,7 +130,7 @@ namespace ConsoleApp26
                         dude.curr += bettin;
                 }
 
-            }
+            
             this.curr = 0;
             Donezo:
             this.curr = 0;
@@ -455,7 +454,7 @@ namespace ConsoleApp26
     {
         public static int fullamt = 0;
         public static List<string> playercards = new List<string>();
-        public static List<Npc> peeps = new List<Npc> { new Npc(false, "knuckles"), new Npc(false, "Dante"), new Npc(false, "Jeanne") };
+        public static List<Npc> peeps = new List<Npc> { new Npc(false, "knuckles", 5000), new Npc(false, "Dante", 10000), new Npc(false, "Jeanne", 8000) };
         public static Random ran2 = new Random();
         public static int pot = 0;
         public static int ante = 50;
@@ -471,10 +470,9 @@ namespace ConsoleApp26
             Console.WriteLine("$$$$$$$$$$$$new game$$$$$$$$$$$");
             Console.WriteLine("Whats your name?");
             namer = Console.ReadLine();
-            peeps.Add(new Npc(true, namer));
+            peeps.Add(new Npc(true, namer, 100000));
             foreach (Npc qq in peeps)
             {
-                qq.credit = 2000;
                 pot = 0;
                 ante = 50;
                 rounds = 0;
@@ -619,15 +617,16 @@ namespace ConsoleApp26
                         if (peeps.Where(ip => new PokerHand(string.Join(" ", outof.cards.Concat(Game.board))).CompareWith(new PokerHand(string.Join(" ", ip.cards.Concat(Game.board)))) == Result.Loss).Count() == 0)
                         {
                             outof.credit += peeps.Select(plo => plo.inpot <= outof.inpot ? plo.inpot : outof.inpot).Sum();
-                            Game.pot -= peeps.Select(plo => plo.inpot >= outof.inpot ? plo.inpot : plo.inpot - (outof.inpot - plo.inpot)).Sum();
-                            Console.WriteLine(outof.name + "won: " + peeps.Select(plo => plo.inpot >= outof.inpot ? plo.inpot : plo.inpot - (outof.inpot - plo.inpot)).Sum());
-                            outof.folded = true;
+                            Game.pot -= peeps.Select(plo => plo.inpot <= outof.inpot ? plo.inpot : outof.inpot).Sum();
+                            Console.WriteLine(outof.name + " won: " + peeps.Select(plo => plo.inpot <= outof.inpot ? plo.inpot : outof.inpot).Sum());
+
+
                             foreach (Npc lk in peeps.Where(ml=>ml.folded = false && ml != outof))
                             {
-                                lk.inpot -= outof.inpot;
+                                lk.inpot -= outof.inpot <= lk.inpot ? outof.inpot : lk.inpot;
                             }
                             fullamt -= outof.inpot;
-
+                            outof.folded = true;
                             outof.inpot = 0;
                         }
                     }
@@ -649,7 +648,7 @@ namespace ConsoleApp26
                             if (tuy.ToString() == Result.Loss.ToString())
                                 man.folded = true;
                         }
-
+                    
                     }
                     foreach (Npc won in peeps)
                     {
@@ -666,7 +665,7 @@ namespace ConsoleApp26
                 System.Threading.Thread.Sleep(3000);
             }
 
-            if (peeps.Where(lk => lk.credit < ante).Count() <= 1)
+            if (peeps.Where(lk => lk.credit >= ante).Count() >= 2)
             {
                 Npc shift = peeps[0];
                 peeps.RemoveAt(0);
@@ -675,16 +674,16 @@ namespace ConsoleApp26
                 rounds++;
                 RoundStart();
             }
-            else if (peeps.Where(ok => ok.credit > ante).ToList()[0].player == true)
+            else if (peeps.Where(ok => ok.credit < ante && ok.player == true).Count() > 0)
             {
-
-
-                Console.WriteLine("you won; new game");
+                Console.WriteLine("you lost; new game");
                 GameStart();
+
+               
             }
             else
             {
-                Console.WriteLine("you lost; new game");
+                Console.WriteLine("you won; new game");
                 GameStart();
             }
         }
