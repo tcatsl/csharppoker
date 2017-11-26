@@ -414,12 +414,12 @@ namespace ConsoleApp26
                     this.AllIn();
                     return;
                 }
-                if (res > 15 || (this.odds >= 0.5509) && res > 8)
+                if (res > 17 || ((this.odds >= 0.5509) && res > 11))
                 {
                     this.Bet(0);
                     return;
                 }
-                if (res >= 8 || (this.odds >= 0.5 && res > 4))
+                if (res >= 8 || (this.odds >= 0.4 && res > 4))
                 {
                     this.Call();
                     return;
