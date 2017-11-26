@@ -15,11 +15,11 @@ namespace ConsoleApp26
         public bool player;
         public int inpot;
         public string name;
-        public float odds;
-        public float tempwins;
-        public float iter;
-        public float wins;
-        public float lossodds;
+        public double odds;
+        public double tempwins;
+        public double iter;
+        public double wins;
+        public double lossodds;
         public int temploss;
         public int iterloss;
         public int loss;
@@ -57,16 +57,16 @@ namespace ConsoleApp26
             int maxIndex = Game.peeps.Select(unc => unc.credit).ToList().IndexOf(maxValue);
             if (maxIndex != -1)
             {
-                if (temp >= Game.peeps[maxIndex].credit && temp < credit - curr)
+                if (temp >= Game.peeps[maxIndex].credit && temp <= credit - curr)
                 {
                     temp = Game.peeps[maxIndex].credit;
-                    System.Threading.Thread.Sleep(500); Console.WriteLine(this.name + " puts everyone all in for " + temp + ".");
+                    System.Threading.Thread.Sleep(500); Console.WriteLine(this.name + " puts everyone all in for " + (temp) + ".");
                 }
             }
             if (temp >= credit - curr)
             {
                 Game.pot += this.credit;
-
+                if (!(temp >= Game.peeps[maxIndex].credit && temp <= credit - curr))
                 System.Threading.Thread.Sleep(500); Console.WriteLine(this.name + " goes all in for " + this.credit + ".");
                 this.inpot += this.credit;
 
@@ -111,7 +111,7 @@ namespace ConsoleApp26
             {
                 if (temp < Game.peeps[maxIndex].credit && !(temp >= credit))
                 {
-                    System.Threading.Thread.Sleep(500); Console.WriteLine(this.name + " calls " + this.curr + " and raises " + bettin + ".");
+                    System.Threading.Thread.Sleep(500); Console.WriteLine(this.name + (this.curr > 0 ? (" calls " + this.curr + " and") : "") + " raises " + bettin + ".");
                 }
             }
             this.credit -= bettin;
@@ -220,7 +220,7 @@ namespace ConsoleApp26
             this.lossodds = 0;
             this.iterloss = 0;
         }
-        public float Ponder(Result whelp)
+        public double Ponder(Result whelp)
         {
             System.Threading.Thread.Sleep(500); Console.WriteLine(this.name + " is thinking.");
             this.Reset();
@@ -234,14 +234,7 @@ namespace ConsoleApp26
                 return (float)0.33;
             }
         }
-        public float PonderLoss()
-        {
-            System.Threading.Thread.Sleep(500); Console.WriteLine(this.name + " is thinking.");
-            this.ResetLoss();
-                return this.SpeculateLoss();
-            
-        }
-        public float Speculate(Result hmm)
+        public double Speculate(Result hmm)
         {
             this.tempwins = this.wins;
             if (hmm == Result.Loss)
@@ -268,19 +261,9 @@ namespace ConsoleApp26
                 this.iter++;
             }
 
-            return (float)(Math.Abs(((double)wins / (iter + 1) - (double)tempwins / iter)) < 0.00005 && iter > 10000 ? (double)(tempwins / iter) : this.Speculate(hmm));
+            return (double)(Math.Abs(((double)wins / (iter + 1) - (double)tempwins / iter)) < 0.000008 && iter > 20000 ? (double)(tempwins / iter) : this.Speculate(hmm));
         }
-        public float SpeculateLoss()
-        {
-            this.temploss = this.loss;
-            if (this.TryWin())
-            {
-                this.loss++;
-            }
-            this.iterloss++;
 
-            return (float)(Math.Abs(((double)loss / (iterloss + 1) - (double)temploss / loss)) < 0.00005 && iterloss > 100 ? (double)(temploss / iterloss) : this.SpeculateLoss());
-        }
         public bool TryTie()
         {
             int trywins = 0;
