@@ -142,7 +142,6 @@ namespace ConsoleApp26
             Console.WriteLine(this.name +" folds" );
             this.folded = true;
             this.curr = 0;
-            Console.WriteLine("Pot: " + Game.pot);
         }
         public void Call()
         {
@@ -151,20 +150,17 @@ namespace ConsoleApp26
             this.credit -= this.curr;
             this.inpot += this.curr;
             this.curr = 0;
-            Console.WriteLine("Pot: " + Game.pot);
         }
         public void Check()
         {
             Console.WriteLine(this.name + " checks");
-            Console.WriteLine("Pot: " + Game.pot);
             this.curr = 0;
         }
         public void AllIn()
         {
 
             Bet(this.credit);
-
-            Console.WriteLine("Pot: " + Game.pot);
+            
         }
         public void Ante()
         {
@@ -284,6 +280,7 @@ namespace ConsoleApp26
         }
         public void AI()
         {
+            
             if  (Game.peeps.Where(loc => loc.folded == false && loc != this && loc.credit > 0).Count() < 1)
             {
                 this.Check();
@@ -343,7 +340,6 @@ namespace ConsoleApp26
 
             if (this.folded == true)
                 return;
-            Console.WriteLine("Balance: " + this.credit);
             if (this.credit <= 0 || Game.peeps.Where(ok=>ok.credit  > 0 && !ok.folded && ok != this).Count() < 1)
             {
                 this.Check();
@@ -447,6 +443,8 @@ namespace ConsoleApp26
                     this.NotAI();
                 }
             }
+
+            Console.WriteLine("Balance: " + this.credit);
         }
     }
     public enum Result
@@ -580,15 +578,19 @@ namespace ConsoleApp26
                     
 
                     Console.WriteLine("__________turn_"+ turn +"_start_________");
+                    
                     if (one2.player == true)
                     {
                         Console.WriteLine("your cards: " + string.Join(" ", one2.cards));
-
                         Console.WriteLine("board cards: " + string.Join(" ", board));
+                        Console.WriteLine("your balance: " + one2.credit);
                     }
                     turn++;
+                    
                     one2.Act();
 
+                    Console.WriteLine("Ending Balance: " + one2.credit);
+                    Console.WriteLine("Pot: " + Game.pot);
                     Console.WriteLine("___________turn_end____________");
                 }
             }
