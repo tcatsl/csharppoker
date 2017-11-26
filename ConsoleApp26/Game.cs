@@ -24,7 +24,7 @@ namespace ConsoleApp26
         public static string namer;
         public static void GameStart()
         {
-            System.Threading.Thread.Sleep(500); Console.WriteLine("$$$$$$$$$$$$new game$$$$$$$$$$$");
+            System.Threading.Thread.Sleep(500); Console.WriteLine("############new game###########");
             System.Threading.Thread.Sleep(500); Console.WriteLine("Whats your name?");
             namer = Console.ReadLine();
             peeps.Add(new Player(true, namer, 2500));
@@ -51,6 +51,7 @@ namespace ConsoleApp26
                 }
             }
             ante = ante + 30;
+            Console.WriteLine("$$$$$$$$$$$standings$$$$$$$$$$$");
             foreach (Player playa in peeps)
             {
 
@@ -65,6 +66,8 @@ namespace ConsoleApp26
                     playa.folded = false;
                 }
             }
+
+            Console.WriteLine("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
             board = new List<string>();
             subround = 0;
             SubroundStart();
@@ -223,7 +226,7 @@ namespace ConsoleApp26
                     if (won.folded == false)
                     {
                         won.credit = won.credit + (Game.pot / peeps.Where(yoo => yoo.folded == false).Count());
-                        System.Threading.Thread.Sleep(500); Console.WriteLine(won.name + " won: " + Game.pot / peeps.Where(yoo => yoo.folded == false).Count());
+                        System.Threading.Thread.Sleep(500); Console.WriteLine(won.name + " won " + Game.pot / peeps.Where(yoo => yoo.folded == false).Count() + ".");
                     }
                 }
                 Game.pot = 0;

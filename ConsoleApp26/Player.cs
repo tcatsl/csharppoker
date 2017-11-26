@@ -79,9 +79,9 @@ namespace ConsoleApp26
                     if (dude.folded == false && dude.credit > 0 && dude != this && (this.credit - this.curr) > 0)
                         dude.curr += this.credit - this.curr;
                 }
-                if (Game.peeps.Where(dude => dude.folded == false && dude.credit > 0 && dude != this && (this.credit - this.curr) > 0).Count() > 0)
+                if (Game.peeps.Where(dude => dude.folded == false && dude.credit > 0 && dude != this).Count() > 0 && (this.credit - this.curr) > 0)
                 {
-                    Game.fullamt += this.credit;
+                    Game.fullamt += this.credit - this.curr;
 
                 }
                 this.credit = 0;
@@ -167,7 +167,7 @@ namespace ConsoleApp26
             this.credit -= bettin;
             this.inpot += bettin;
             Game.pot += bettin;
-            foreach (Player dude in Game.peeps)
+            foreach (Player dude in Game.peeps.Where(po=>po.credit >= Game.ante))
             {
                 if (dude != this && dude.folded == false)
                     dude.curr = Game.ante - dude.inpot;
