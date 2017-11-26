@@ -60,7 +60,7 @@ namespace ConsoleApp26
             pok.full = pok.nums.Where(card1 => pok.nums.Where(card2 => card1 == card2).Count() == 2).Count() + pok.nums.Where(card3 => pok.nums.Where(card4 => card3 == card4).Count() == 3).Count() == 5 || pok.nums.Where(card1 => pok.nums.Where(card2 => card1 == card2).Count() == 2).Count() + pok.nums.Where(card3 => pok.nums.Where(card4 => card3 == card4).Count() == 3).Count() == 7; //full house--three of a kind plus a pair
 
             //straight determination
-            pok.nums = !pok.flush ? pok.nums.OrderBy(groupx => Array.IndexOf(customOrder, groupx)).ToArray() : pok.arr.Where(suit1 => pok.arr.Where(suit2 => suit1[1] == suit2[1]).Count() >= 5).Select(card => card[0]).OrderBy(group => Array.IndexOf(customOrder, group)).Take(5).ToArray();
+            pok.nums = !pok.flush ? pok.nums.OrderBy(groupx => Array.IndexOf(customOrder, groupx)).ToArray() : pok.arr.Where(suit1 => pok.arr.Where(suit2 => suit1[1] == suit2[1]).Count() >= 5).Select(card => card[0]).OrderBy(group => Array.IndexOf(customOrder, group)).ToArray();
 
             //card to start at for straight determination
             int strikes = 0;

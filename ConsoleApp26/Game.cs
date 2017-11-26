@@ -11,7 +11,7 @@ namespace ConsoleApp26
         public static string version = "0.952b";
         public static int fullamt = 0;
         public static List<string> playercards = new List<string>();
-        public static List<Player> peeps = new List<Player> { new Player(false, "knuckles", 2000), new Player(false, "Dante", 2000), new Player(false, "Jeanne", 2000) };
+        public static List<Player> peeps = new List<Player> { new Player(false, "knuckles", 2500), new Player(false, "Dante", 2500), new Player(false, "Jeanne", 2500) };
         public static Random ran2 = new Random();
         public static int pot = 0;
         public static int ante = 50;
@@ -27,12 +27,13 @@ namespace ConsoleApp26
             System.Threading.Thread.Sleep(500); Console.WriteLine("$$$$$$$$$$$$new game$$$$$$$$$$$");
             System.Threading.Thread.Sleep(500); Console.WriteLine("Whats your name?");
             namer = Console.ReadLine();
-            peeps.Add(new Player(true, namer, 2000));
+            peeps.Add(new Player(true, namer, 2500));
+
+            pot = 0;
+            ante = 50;
+            rounds = 0;
             foreach (Player qq in peeps)
             {
-                pot = 0;
-                ante = 50;
-                rounds = 0;
                 qq.folded = false;
             }
             RoundStart();
@@ -57,10 +58,11 @@ namespace ConsoleApp26
                 playa.inpot = 0;
                 playa.curr = 0;
                 System.Threading.Thread.Sleep(500); Console.WriteLine(playa.name + ": " + playa.credit);
+
+                playa.cards = new List<string>();
                 if (playa.credit >= ante)
                 {
                     playa.folded = false;
-                    playa.cards = new List<string>();
                 }
             }
             board = new List<string>();

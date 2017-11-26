@@ -66,8 +66,11 @@ namespace ConsoleApp26
             if (temp >= credit - curr)
             {
                 Game.pot += this.credit;
-                if (!(temp >= Game.peeps[maxIndex].credit && temp <= credit - curr))
-                System.Threading.Thread.Sleep(500); Console.WriteLine(this.name + " goes all in for " + this.credit + ".");
+                if (maxIndex != -1)
+                {
+                    if (!(temp >= Game.peeps[maxIndex].credit && temp <= credit - curr))
+                        System.Threading.Thread.Sleep(500); Console.WriteLine(this.name + " goes all in for " + this.credit + ".");
+                }
                 this.inpot += this.credit;
 
 
@@ -261,7 +264,7 @@ namespace ConsoleApp26
                 this.iter++;
             }
 
-            return (double)(Math.Abs(((double)wins / (iter + 1) - (double)tempwins / iter)) < 0.000008 && iter > 20000 ? (double)(tempwins / iter) : this.Speculate(hmm));
+            return (double)(Math.Abs(((double)(wins / iter) - (double)(tempwins / (iter!= 0? iter -1:1) ))) <= 0.00002 && iter > 20000 ? (double)(wins / (iter)) : this.Speculate(hmm));
         }
 
         public bool TryTie()
