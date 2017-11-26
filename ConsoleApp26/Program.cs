@@ -12,12 +12,13 @@ namespace ConsoleApp26
         {
             //your hand
             Console.OutputEncoding = System.Text.Encoding.UTF8;
-            PokerHand test1 = new PokerHand("4C 4D 6D 2C JS 3D AH");
+            PokerHand test1 = new PokerHand("AD KD QD JD TD 3D AH");
             //their hand
-            PokerHand test2 = new PokerHand("AS 2S 3S 4S 5D 2D TH");
+            PokerHand test2 = new PokerHand("AS 2S 3H 4S 5S 2D TS");
+            
             //you win. high card.Console.WriteLine(test1.CompareWith(test2).ToString() + test1.flush + test2.flush + string.Join(",", test1.nums));
             Game.GameStart();
-
+            
         }
     }
     public class Npc
@@ -785,6 +786,8 @@ namespace ConsoleApp26
                 pok.straight = false;
 
             }
+            bool straightflush = pok.straight && pok.flush && pok.straightArr.ToList().OrderBy(group => Array.IndexOf(customOrder, group)).SequenceEqual(pok.arr.Where(suit1 => pok.arr.Where(suit2 => suit1[1] == suit2[1]).Count() >= 5).Select(card => card[0]).OrderBy(group => Array.IndexOf(customOrder, group)).Take(5).ToArray());
+            Console.WriteLine(straightflush);
             if (pok.flush == true && pok.straight == false)
             {
                 pok.straightArr = pok.arr.Where(suit1 => pok.arr.Where(suit2 => suit1[1] == suit2[1]).Count() >= 5).Select(card => card[0]).OrderBy(group => Array.IndexOf(customOrder, group)).Take(5).ToArray();
@@ -802,7 +805,7 @@ namespace ConsoleApp26
             }
                 //generate binary hand reduction for easy scoring
                 //Console.WriteLine(pok.straight);
-                pok.binwin = new int[] { pok.straight && pok.flush ? 1 : 0, pok.four ? 1 : 0, pok.full ? 1 : 0, pok.flush ? 1 : 0, pok.straight ? 1 : 0, pok.trip ? 1 : 0, pok.twopair ? 1 : 0, pok.pair ? 1 : 0, 1 }; //high card is always true
+                pok.binwin = new int[] { straightflush ? 1 : 0, pok.four ? 1 : 0, pok.full ? 1 : 0, pok.flush ? 1 : 0, pok.straight ? 1 : 0, pok.trip ? 1 : 0, pok.twopair ? 1 : 0, pok.pair ? 1 : 0, 1 }; //high card is always true
             
         }
 
