@@ -49,7 +49,7 @@ namespace ConsoleApp26
             int maxIndex = Game.peeps.Select(unc => unc.credit).ToList().IndexOf(maxValue);
             if (maxIndex != -1)
             {
-                if (temp >= Game.peeps[maxIndex].credit && temp <= credit - curr)
+                if (temp >= Game.peeps[maxIndex].credit && temp < credit - curr)
                 {
                     temp = Game.peeps[maxIndex].credit;
                     System.Threading.Thread.Sleep(500); Console.WriteLine(this.name + " puts everyone all in for " + temp + ".");
