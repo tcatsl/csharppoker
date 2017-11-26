@@ -295,13 +295,18 @@ namespace ConsoleApp26
             if (this.curr < this.credit)
             {
 
-                int res = this.ran.Next(0, 20);
+                int res = this.ran.Next(0, 21);
+                if (res == 20 && this.odds > 0.3)
+                {
+                    this.AllIn();
+                    return;
+                }
                 if (res > 17 || (this.odds >= 0.5509) && res > 8)
                 {
                     this.Bet(0);
                     return;
                 }
-                if (res >= 12 || (this.odds >= 0.5 && res > 5))
+                if (res >= 8 || (this.odds >= 0.5 && res > 4))
                 {
                     this.Call();
                     return;
