@@ -308,7 +308,7 @@ namespace ConsoleApp26
             if (this.curr < this.credit)
             {
                 
-                int res = this.ran.Next(1, 20);
+                int res = this.ran.Next(0, 20);
                 if (res > 17 || (this.odds >= 0.5509) && res > 8)
                 {
                     this.Bet(0);
@@ -355,17 +355,33 @@ namespace ConsoleApp26
                 if (act == "bet")
                 {
                     int c;
-                    Console.WriteLine("Bet how much?");
-                    c = Int32.Parse(Console.ReadLine());
-                    if (c > 0 && c <= this.credit)
-                    {
-                        this.Bet(c);
-                        return;
-                    }else
-                    {
-                        Console.WriteLine("not enough funds");
-                        this.NotAI();
 
+                    Rebet:
+                    {
+                        Console.WriteLine("Bet how much?");
+                        string inp = Console.ReadLine();
+                        int y = 0;
+                        bool succ = Int32.TryParse(inp, out y);
+                        if (succ)
+                        {
+
+
+                            c = Int32.Parse(inp);
+                            if (c >= Game.ante && c <= this.credit)
+                            {
+                                this.Bet(c);
+                                return;
+                            }
+                            else
+                            {
+                                Console.WriteLine("minimum bet is: " + Game.ante + ". maximum is: " + (this.credit - this.curr) + ".");
+                                this.NotAI();
+                            }
+                        }
+                        else
+                        {
+                            goto Rebet;
+                        }
                     }
                 }
                 else if (act == "check")
@@ -552,6 +568,7 @@ namespace ConsoleApp26
                 deck.RemoveAt(dex < deck.Count() ? dex : 0);
             }
 
+            Console.WriteLine("board cards: " + string.Join(" ", board));
             for (var u = 0; u < 99; u++)
             {
                 if ((peeps.Where(mp => mp.folded == true).Count() >= peeps.Count() -1))
@@ -584,6 +601,7 @@ namespace ConsoleApp26
                         Console.WriteLine("your cards: " + string.Join(" ", one2.cards));
                         Console.WriteLine("board cards: " + string.Join(" ", board));
                         Console.WriteLine("your balance: " + one2.credit);
+                        Console.WriteLine("players still in: "+string.Join(", ", Game.peeps.Where(peep=>peep.folded == false).Select(pl=>pl.name).ToArray()));
                     }
                     turn++;
                     
