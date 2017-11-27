@@ -53,7 +53,7 @@ namespace ConsoleApp26
 
 
             //single line booleans
-            pok.flush = pok.suits.Where(suit1 => pok.suits.Where(suit2 => suit1 == suit2).Count() == 5).Count() == 5 || pok.suits.Where(suit3 => pok.suits.Where(suit4 => suit4 == suit3).Count() == 6).Count() == 6 || pok.suits.Where(suit5 => pok.suits.Where(suit6 => suit5 == suit6).Count() == 7).Count() == 7;
+            pok.flush = pok.suits.Where(suit1 => pok.suits.Where(suit2 => suit1 == suit2).Count() >= 5).Count() >= 5;
             pok.pair = pok.nums.Where(card1 => pok.nums.Where(card2 => card1 == card2).Count() == 2).Count() == 2; ; //single pair
             pok.trip = pok.nums.Where(card1 => pok.nums.Where(card2 => card1 == card2).Count() == 3).Count() == 3; //three of a kind
             pok.four = pok.nums.Where(card1 => pok.nums.Where(card2 => card1 == card2).Count() == 4).Count() == 4; //4 of a kind
@@ -67,14 +67,14 @@ namespace ConsoleApp26
             int strikes = 0;
             int streak = 1;
 
-            int start = customOrder.ToList().IndexOf(pok.nums.Distinct().ToList()[0]);
+            int start = customOrder.ToList().IndexOf(pok.nums.ToList()[0]);
             int count = pok.nums.Count();
-            for (int o = 0; o < pok.nums.Distinct().Count() - 1; o++)
+            for (int o = 0; o < pok.nums.Count() - 1; o++)
 
             {
                 
                 start = customOrder.ToList().IndexOf(pok.nums.ToList()[o]);
-                if (streak >= 5 || pok.nums.Distinct().Count() < 5 || pok.four == true || pok.full == true)
+                if (streak >= 5 || pok.nums.Count() < 5 || pok.four == true || pok.full == true)
                     break;
 
                 int ahead = customOrder.ToList().IndexOf(pok.nums.ToList()[o + 1]);
@@ -109,7 +109,7 @@ namespace ConsoleApp26
                 pok.straight = false;
 
             }
-            bool straightflush = pok.straight && pok.flush && pok.straightArr.ToList().OrderBy(group => Array.IndexOf(customOrder, group)).SequenceEqual(pok.arr.Where(suit1 => pok.arr.Where(suit2 => suit1[1] == suit2[1]).Count() >= 5).Select(card => card[0]).OrderBy(group => Array.IndexOf(customOrder, group)).Take(5).ToArray());
+            bool straightflush = pok.straight && pok.flush && pok.straightArr.Intersect(pok.arr.Where(suit1 => pok.arr.Where(suit2 => suit1[1] == suit2[1]).Count() >= 5).Select(card => card[0]).OrderBy(group => Array.IndexOf(customOrder, group))).Count() >= 5; ;
             //System.Threading.Thread.Sleep(500); Console.WriteLine(straightflush);
             if (pok.flush == true && pok.straight == false)
             {

@@ -6,7 +6,7 @@ namespace ConsoleApp26
 {
     public static class Game
     {
-        public static string version = "0.961b";
+        public static string version = "0.962b";
         public static int fullamt = 0;
         public static List<string> playercards = new List<string>();
         public static List<Player> peeps = new List<Player> { new Player(false, "knuckles", 2500), new Player(false, "Dante", 2500), new Player(false, "Jeanne", 2500) };
@@ -34,12 +34,24 @@ namespace ConsoleApp26
             string opt = Console.ReadLine();
             if (opt == "spectate")
             {
-                
+
+                peeps.Add(new Player(true, namer, cree));
+
+                peeps[peeps.Count() - 1].folded = true;
+
             } else if (opt == "play")
             {
                 cree = 2500;
+
+                peeps.Add(new Player(true, namer, cree));
+
+                peeps[peeps.Count() - 1].folded = false;
             } else if (opt == "control all players") {
                 cree = 2500;
+
+                peeps.Add(new Player(true, namer, cree));
+
+                peeps[peeps.Count() - 1].folded = false;
                 foreach (Player cc in peeps)
                 {
                     cc.player = true;
@@ -52,12 +64,10 @@ namespace ConsoleApp26
             }
 
             
-            peeps.Add(new Player(true, namer, cree));
             foreach (Player qq in peeps)
             {
                 qq.folded = false;
             }
-            peeps[peeps.Count() - 1].folded = true;
 
             pot = 0;
             ante = 50;
@@ -145,7 +155,7 @@ namespace ConsoleApp26
                     if ((peeps.Where(mp => mp.folded == true).Count() >= peeps.Count() - 1))
                         break;
                     System.Threading.Thread.Sleep(500); Console.WriteLine("_________________turn_" + turn + "_start______________");
-                    Console.WriteLine(one2.name);
+                    Console.WriteLine(one2.name+"'(s) turn");
 
                     if (one2.player == true)
                     {

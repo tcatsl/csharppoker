@@ -340,9 +340,9 @@ namespace ConsoleApp26
             List<string> tempcards = new List<string>();
             List<List<string>> oppcards = new List<List<string>>();
 
-            List<string> encards = string.Join(" ", Game.peeps.Where(peeper => peeper != this).Select(io => string.Join(" ", io.cards)).ToList()).Split(new char[] { ' ' }).ToList();
+            List<string> encards = string.Join(" ", Game.peeps.Where(peeper => peeper != this && peeper.cards.Count() > 0).Select(io => string.Join(" ", io.cards)).ToList()).Split(new char[] { ' ' }).ToList();
             List<string> tempdeck = new List<string>(Game.deck.Concat(encards));
-            for (int u = 0; u < Game.peeps.Where(mip => mip != this).Count(); u++)
+            for (int u = 0; u < Game.peeps.Where(mip => mip != this && mip.cards.Count()> 0).Count(); u++)
             {
                 List<string> tempc = new List<string>();
                 for (int im = 0; im < 2; im++)

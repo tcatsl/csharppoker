@@ -1,0 +1,11 @@
+C:\Users\tcats\source\repos\ConsoleApp26\PokerHands.tests\bin\Release\PokerHands.tests.dll
+C:\Users\tcats\source\repos\ConsoleApp26\PokerHands.tests\bin\Release\PokerHands.tests.pdb
+C:\Users\tcats\source\repos\ConsoleApp26\PokerHands.tests\bin\Release\ConsoleApp26.exe
+C:\Users\tcats\source\repos\ConsoleApp26\PokerHands.tests\bin\Release\nunit.framework.dll
+C:\Users\tcats\source\repos\ConsoleApp26\PokerHands.tests\bin\Release\ConsoleApp26.pdb
+C:\Users\tcats\source\repos\ConsoleApp26\PokerHands.tests\bin\Release\ConsoleApp26.exe.config
+C:\Users\tcats\source\repos\ConsoleApp26\PokerHands.tests\bin\Release\nunit.framework.xml
+C:\Users\tcats\source\repos\ConsoleApp26\PokerHands.tests\obj\Release\PokerHands.tests.csprojResolveAssemblyReference.cache
+C:\Users\tcats\source\repos\ConsoleApp26\PokerHands.tests\obj\Release\PokerHands.tests.csproj.CoreCompileInputs.cache
+C:\Users\tcats\source\repos\ConsoleApp26\PokerHands.tests\obj\Release\PokerHands.tests.dll
+C:\Users\tcats\source\repos\ConsoleApp26\PokerHands.tests\obj\Release\PokerHands.tests.pdb
