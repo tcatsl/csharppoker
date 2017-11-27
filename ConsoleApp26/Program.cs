@@ -12,9 +12,10 @@ namespace ConsoleApp26
         {
             //your hand
             Console.OutputEncoding = System.Text.Encoding.UTF8;
-            PokerHand test1 = new PokerHand("AD KD QD JD TD 3D AH");
+            PokerHand test1 = new PokerHand("AD KD QD JD TD 9D 3D");
             //their hand
-            PokerHand test2 = new PokerHand("AS 2S 3H 4S 5S 2D TS");
+            PokerHand test2 = new PokerHand("AS 2S 3S 4D 5S 6S 7S");
+            //Console.WriteLine(test1.CompareWith(test2));
             System.Threading.Thread.Sleep(1000);  Console.WriteLine("welcome to real poker time v"+ Game.version);
             System.Threading.Thread.Sleep(500); Console.WriteLine("contribute at:"); System.Threading.Thread.Sleep(500); Console.WriteLine("https://github.com/tcatsl/csharppoker/");
             System.Threading.Thread.Sleep(1000);

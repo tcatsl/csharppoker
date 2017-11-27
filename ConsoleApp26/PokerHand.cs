@@ -61,18 +61,18 @@ namespace ConsoleApp26
             pok.full = pok.nums.Where(card1 => pok.nums.Where(card2 => card1 == card2).Count() == 2).Count() + pok.nums.Where(card3 => pok.nums.Where(card4 => card3 == card4).Count() == 3).Count() == 5 || pok.nums.Where(card1 => pok.nums.Where(card2 => card1 == card2).Count() == 2).Count() + pok.nums.Where(card3 => pok.nums.Where(card4 => card3 == card4).Count() == 3).Count() == 7; //full house--three of a kind plus a pair
 
             //straight determination
-            pok.nums = !pok.flush ? pok.nums.OrderBy(groupx => Array.IndexOf(customOrder, groupx)).ToArray() : pok.arr.Where(suit1 => pok.arr.Where(suit2 => suit1[1] == suit2[1]).Count() >= 5).Select(card => card[0]).OrderBy(group => Array.IndexOf(customOrder, group)).ToArray();
+            pok.nums = !pok.flush ? pok.nums.Distinct().OrderBy(groupx => Array.IndexOf(customOrder, groupx)).ToArray() : pok.arr.Where(suit1 => pok.arr.Where(suit2 => suit1[1] == suit2[1]).Count() >= 5).Select(card => card[0]).Distinct().OrderBy(group => Array.IndexOf(customOrder, group)).ToArray();
             
             //card to start at for straight determination
             int strikes = 0;
             int streak = 1;
 
             int start = customOrder.ToList().IndexOf(pok.nums.Distinct().ToList()[0]);
-            int count = pok.nums.Distinct().Count();
+            int count = pok.nums.Count();
             for (int o = 0; o < pok.nums.Distinct().Count() - 1; o++)
 
             {
-                if (streak == 4 && pok.nums.Distinct().ToList()[0] == 'A' && streak == 4 ? pok.straightArr[streak-1] == '2' : false)
+                if (streak == 4 && pok.nums.ToList()[0] == 'A' && (streak == 4 ? pok.straightArr[streak-1] == '2' : false))
 
                 {
                     pok.straightArr[4] = 'A';
@@ -80,11 +80,11 @@ namespace ConsoleApp26
                     streak++;
                     break;
                 }
-                start = customOrder.ToList().IndexOf(pok.nums.Distinct().ToList()[o]);
+                start = customOrder.ToList().IndexOf(pok.nums.ToList()[o]);
                 if (streak >= 5 || pok.nums.Distinct().Count() < 5 || pok.four == true || pok.full == true)
                     break;
 
-                int ahead = customOrder.ToList().IndexOf(pok.nums.Distinct().ToList()[o + 1]);
+                int ahead = customOrder.ToList().IndexOf(pok.nums.ToList()[o + 1]);
 
                 if (start + 1 != ahead)
                 {
@@ -95,8 +95,8 @@ namespace ConsoleApp26
                 else
                 {
                     
-                    pok.straightArr[streak] = pok.nums.Distinct().ToList()[o+1];
-                    pok.straightArr[streak-1] = pok.nums.Distinct().ToList()[o];
+                    pok.straightArr[streak] = pok.nums.ToList()[o+1];
+                    pok.straightArr[streak-1] = pok.nums.ToList()[o];
 
                     streak++;
                     continue;
@@ -117,7 +117,7 @@ namespace ConsoleApp26
             }
             else if (pok.flush == false && pok.straight == false)
             {
-                pok.straightArr = pok.nums.ToList().GroupBy(n => n)
+                pok.straightArr = pok.arr.ToList().Select(ok=>ok[0]).GroupBy(n => n)
                     .Select(group => new
                     {
                         Number = group.Key,
