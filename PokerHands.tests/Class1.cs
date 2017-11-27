@@ -11,7 +11,7 @@ namespace ConsoleApp26.tests
     public class HandTests
     {
         [Test]
-        public void CanConvertEnumIntoMultipleWords()
+        public void StraightFlushTests()
         {
             PokerHand test1 = new PokerHand("AD KD QD JD TD 9D 3D");
             //their hand
