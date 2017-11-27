@@ -19,7 +19,8 @@ namespace ConsoleApp26
         public double tempwins;
         public double iter;
         public double wins;
-        public double lossodds;
+        public double odds2;
+        public double odds3;
         public int temploss;
         public int iterloss;
         public int loss;
@@ -34,7 +35,6 @@ namespace ConsoleApp26
             this.loss = 0;
             this.temploss = 0;
             this.iterloss = 0;
-            this.lossodds = 0;
             this.inpot = 0;
             this.wins = 0;
             this.iter = 0;
@@ -222,26 +222,11 @@ namespace ConsoleApp26
             this.odds = 0;
             this.iter = 0;
         }
-        public void ResetLoss()
-        {
-            this.loss = 0;
-            this.temploss = 0;
-            this.lossodds = 0;
-            this.iterloss = 0;
-        }
         public double Ponder(Result whelp)
         {
             Console.WriteLine(this.name + " is thinking.");
             this.Reset();
-            if (this.cards.Count() > 0)
-            {
-
-                return this.Speculate(whelp);
-            }
-            else
-            {
-                return (float)0.33;
-            }
+            return this.Speculate(whelp);
         }
         public double Speculate(Result hmm)
         {
@@ -273,7 +258,7 @@ namespace ConsoleApp26
                 this.iter++;
             }
 
-            return (iter > 10000 ? (double)(wins / (iter)) : this.Speculate(hmm));
+            return (iter >= 12000) ? (double)(wins / (iter)) : this.Speculate(hmm);
         }
 
         public bool TryTie()
@@ -448,12 +433,12 @@ namespace ConsoleApp26
         public void NotAI()
         {
             this.odds = this.Ponder(Result.Win);
-            System.Threading.Thread.Sleep(500); Console.WriteLine(((int)(Math.Round(this.odds * 100))) + "% chance of winning");
+            Console.WriteLine(((int)(Math.Round(this.odds * 100 )))+ "% chance of winning");
 
             this.odds = this.Ponder(Result.Loss);
-            System.Threading.Thread.Sleep(500); Console.WriteLine( ((int)(Math.Round(this.odds * 100))) + "% chance of losing");
+            Console.WriteLine( ((int)(Math.Round(this.odds * 100))) + "% chance of losing");
             this.odds = this.Ponder(Result.Tie);
-            System.Threading.Thread.Sleep(500); Console.WriteLine(((int)(Math.Round(this.odds * 100))) + "% chance of tie");
+            Console.WriteLine(((int)(Math.Round(this.odds * 100))) + "% chance of tie");
 
             if (this.folded == true)
                 return;

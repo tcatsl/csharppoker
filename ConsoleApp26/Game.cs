@@ -6,7 +6,7 @@ namespace ConsoleApp26
 {
     public static class Game
     {
-        public static string version = "0.954b";
+        public static string version = "0.960b";
         public static int fullamt = 0;
         public static List<string> playercards = new List<string>();
         public static List<Player> peeps = new List<Player> { new Player(false, "knuckles", 2500), new Player(false, "Dante", 2500), new Player(false, "Jeanne", 2500) };
@@ -220,7 +220,7 @@ namespace ConsoleApp26
                             System.Threading.Thread.Sleep(500); Console.WriteLine(outof.name + " won " + peeps.Select(plo => plo.inpot <= outof.inpot ? plo.inpot : outof.inpot).Sum() + ".");
 
 
-                            foreach (Player lk in peeps.Where(ml => ml.folded = false && ml != outof))
+                            foreach (Player lk in peeps.Where(ml => ml.folded == false && ml != outof))
                             {
                                 lk.inpot -= outof.inpot <= lk.inpot ? outof.inpot : lk.inpot;
                             }
@@ -244,7 +244,7 @@ namespace ConsoleApp26
                     }
                     foreach (Result tuy in cons)
                     {
-                        if (tuy.ToString() == Result.Loss.ToString())
+                        if (tuy == Result.Loss)
                             man.folded = true;
                     }
 
