@@ -6,7 +6,7 @@ namespace ConsoleApp26
 {
     public static class Game
     {
-        public static string version = "0.960b";
+        public static string version = "0.961b";
         public static int fullamt = 0;
         public static List<string> playercards = new List<string>();
         public static List<Player> peeps = new List<Player> { new Player(false, "knuckles", 2500), new Player(false, "Dante", 2500), new Player(false, "Jeanne", 2500) };
@@ -23,7 +23,7 @@ namespace ConsoleApp26
         public static void GameStart()
         {
             int cree = 0;
-            System.Threading.Thread.Sleep(500); Console.WriteLine("############new game###########");
+            System.Threading.Thread.Sleep(500); Console.WriteLine("##################new game#################");
 
 
             System.Threading.Thread.Sleep(500); Console.WriteLine("Whats your name?");
@@ -68,7 +68,9 @@ namespace ConsoleApp26
         }
         public static void RoundStart()
         {
-            Game.fullamt = ante + 30;
+            if (subround > 0)
+                ante = ante + 30;
+            Game.fullamt = ante;
             deck = new List<string>();
             foreach (char suite in suits)
             {
@@ -77,12 +79,9 @@ namespace ConsoleApp26
                     deck.Add(numb.ToString() + suite.ToString());
                 }
             }
-            ante = ante + 30;
-            Console.WriteLine("$$$$$$$$$$$standings$$$$$$$$$$$");
+            Console.WriteLine("$$$$$$$$$$$$$$$$$$standings$$$$$$$$$$$$$$$$");
             foreach (Player playa in peeps)
             {
-
-
                 playa.inpot = 0;
                 playa.curr = 0;
                 System.Threading.Thread.Sleep(500); Console.WriteLine(playa.name + ": " + playa.credit);
@@ -92,15 +91,15 @@ namespace ConsoleApp26
                 {
                     playa.folded = false;
                     for (var d = 0; d < 2; d++)
-                        {
-                            int dex = ran2.Next(0, deck.Count());
-                            playa.cards.Add(deck[dex < deck.Count() ? dex : 0]);
-                            deck.RemoveAt(dex < deck.Count() ? dex : 0);
-                        }
+                    {
+                         int dex = ran2.Next(0, deck.Count());
+                         playa.cards.Add(deck[dex < deck.Count() ? dex : 0]);
+                         deck.RemoveAt(dex < deck.Count() ? dex : 0);
+                    }
                 }
             }
 
-            Console.WriteLine("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
+            Console.WriteLine("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
             board = new List<string>();
             subround = 0;
             SubroundStart();
@@ -113,38 +112,25 @@ namespace ConsoleApp26
             
             if (subround == 0)
             {
-
-
                 peeps.Where(po => po.folded == false).ToList()[peeps.Where(po => po.folded == false).Count() - 1].Ante();
                 peeps.Where(po => po.folded == false).ToList()[peeps.Where(po => po.folded == false).Count() - 2].SmallAnte();
-
             }
             if (subround == 1)
             {
-
                 for (int u = 0; u < 3; u++)
                 {
                     int dex = ran2.Next(0, deck.Count());
                     board.Add(deck[dex]);
                     deck.RemoveAt(dex);
                 }
-
-
             }
-            if (subround == 2)
+            if (subround == 2 || subround == 3)
             {
                 int dex = ran2.Next(0, deck.Count());
                 board.Add(deck[dex]);
                 deck.RemoveAt(dex);
 
             }
-            if (subround == 3)
-            {
-                int dex = ran2.Next(0, deck.Count());
-                board.Add(deck[dex < deck.Count() ? dex : 0]);
-                deck.RemoveAt(dex < deck.Count() ? dex : 0);
-            }
-
             System.Threading.Thread.Sleep(500); Console.WriteLine("board cards: " + string.Join(" ", board));
             for (var u = 0; u < 99; u++)
             {
@@ -158,10 +144,7 @@ namespace ConsoleApp26
                         break;
                     if ((peeps.Where(mp => mp.folded == true).Count() >= peeps.Count() - 1))
                         break;
-                    
-
-
-                    System.Threading.Thread.Sleep(500); Console.WriteLine("__________turn_" + turn + "_start_________");
+                    System.Threading.Thread.Sleep(500); Console.WriteLine("_________________turn_" + turn + "_start______________");
                     Console.WriteLine(one2.name);
 
                     if (one2.player == true)
@@ -172,12 +155,10 @@ namespace ConsoleApp26
                         System.Threading.Thread.Sleep(500); Console.WriteLine("players still in: " + string.Join(", ", Game.peeps.Where(peep => peep.folded == false).Select(pl => pl.name).ToArray()));
                     }
                     turn++;
-
                     one2.Act();
-
                     System.Threading.Thread.Sleep(500); Console.WriteLine("ending balance: " + one2.credit);
                     System.Threading.Thread.Sleep(500); Console.WriteLine("pot: " + Game.pot);
-                    System.Threading.Thread.Sleep(500); Console.WriteLine("___________turn_end____________");
+                    System.Threading.Thread.Sleep(500); Console.WriteLine("_________________turn_end__________________");
                 }
             }
             subround++;
@@ -187,13 +168,12 @@ namespace ConsoleApp26
             }
             if (Game.peeps.Where(per => per.folded == false).Count() > 1 && subround < 4)
             {
-                System.Threading.Thread.Sleep(500); Console.WriteLine("*****next round of betting*****");
+                System.Threading.Thread.Sleep(500); Console.WriteLine("***********next round of betting***********");
                 SubroundStart();
                 return;
             }
             else
             {
-
                 System.Threading.Thread.Sleep(500); Console.WriteLine("board cards: " + string.Join(" ", board));
                 foreach (Player hy in peeps)
                 {
@@ -203,13 +183,8 @@ namespace ConsoleApp26
                         System.Threading.Thread.Sleep(500); Console.WriteLine(hy.name + " reveals " + String.Join(" ", hy.cards));
                     }
                 }
-                bool split = false;
-
-                if (Game.peeps.Where(ok => ok.folded == false && ok.inpot != fullamt).Count() > 0)
-                {
-                    split = true;
-                }
-                if (split == true)
+                bool split = Game.peeps.Where(ok => ok.folded == false && ok.inpot != fullamt).Count() > 0;
+                if (split)
                 {
                     foreach (Player outof in peeps.Where(peep1 => peep1.folded == false && peep1.inpot < fullamt).OrderBy(pl => pl.inpot).ToList())
                     {
@@ -218,8 +193,6 @@ namespace ConsoleApp26
                             outof.credit += peeps.Select(plo => plo.inpot <= outof.inpot ? plo.inpot : outof.inpot).Sum();
                             Game.pot -= peeps.Select(plo => plo.inpot <= outof.inpot ? plo.inpot : outof.inpot).Sum();
                             System.Threading.Thread.Sleep(500); Console.WriteLine(outof.name + " won " + peeps.Select(plo => plo.inpot <= outof.inpot ? plo.inpot : outof.inpot).Sum() + ".");
-
-
                             foreach (Player lk in peeps.Where(ml => ml.folded == false && ml != outof))
                             {
                                 lk.inpot -= outof.inpot <= lk.inpot ? outof.inpot : lk.inpot;
@@ -269,7 +242,7 @@ namespace ConsoleApp26
                 Player shift = peeps[0];
                 peeps.RemoveAt(0);
                 peeps.Add(shift);
-                System.Threading.Thread.Sleep(500); Console.WriteLine("+++++++++++new round+++++++++++");
+                System.Threading.Thread.Sleep(500); Console.WriteLine("+++++++++++++++++new round+++++++++++++++++");
                 rounds++;
                 RoundStart();
             }

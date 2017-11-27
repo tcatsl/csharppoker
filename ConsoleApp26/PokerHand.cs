@@ -72,14 +72,7 @@ namespace ConsoleApp26
             for (int o = 0; o < pok.nums.Distinct().Count() - 1; o++)
 
             {
-                if (streak == 4 && pok.nums.ToList()[0] == 'A' && (streak == 4 ? pok.straightArr[streak-1] == '2' : false))
-
-                {
-                    pok.straightArr[4] = 'A';
-
-                    streak++;
-                    break;
-                }
+                
                 start = customOrder.ToList().IndexOf(pok.nums.ToList()[o]);
                 if (streak >= 5 || pok.nums.Distinct().Count() < 5 || pok.four == true || pok.full == true)
                     break;
@@ -103,7 +96,14 @@ namespace ConsoleApp26
                 }
                 //if the cards aren't consecutive
             }
-            
+            if (streak == 4 && pok.nums.ToList()[0] == 'A' && (streak == 4 ? pok.straightArr[streak - 1] == '2' : false))
+
+            {
+                pok.straightArr[4] = 'A';
+
+                streak++;
+            }
+
             if (streak < 5)
             {
                 pok.straight = false;
