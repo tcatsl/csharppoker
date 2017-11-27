@@ -6,10 +6,10 @@ namespace ConsoleApp26
 {
     public static class Game
     {
-        public static string version = "0.953b";
+        public static string version = "0.954b";
         public static int fullamt = 0;
         public static List<string> playercards = new List<string>();
-        public static List<Player> peeps = new List<Player> { new Player(false, "knuckles", 2500), new Player(false, "Herb", 2500), new Player(false, "Dante", 2500), new Player(false, "Jeanne", 2500) };
+        public static List<Player> peeps = new List<Player> { new Player(false, "knuckles", 2500), new Player(false, "Dante", 2500), new Player(false, "Jeanne", 2500) };
         public static Random ran2 = new Random();
         public static int pot = 0;
         public static int ante = 50;
@@ -91,6 +91,12 @@ namespace ConsoleApp26
                 if (playa.credit >= ante)
                 {
                     playa.folded = false;
+                    for (var d = 0; d < 2; d++)
+                        {
+                            int dex = ran2.Next(0, deck.Count());
+                            playa.cards.Add(deck[dex < deck.Count() ? dex : 0]);
+                            deck.RemoveAt(dex < deck.Count() ? dex : 0);
+                        }
                 }
             }
 
@@ -119,8 +125,8 @@ namespace ConsoleApp26
                 for (int u = 0; u < 3; u++)
                 {
                     int dex = ran2.Next(0, deck.Count());
-                    board.Add(deck[dex < deck.Count() ? dex : 0]);
-                    deck.RemoveAt(dex < deck.Count() ? dex : 0);
+                    board.Add(deck[dex]);
+                    deck.RemoveAt(dex);
                 }
 
 
@@ -128,8 +134,8 @@ namespace ConsoleApp26
             if (subround == 2)
             {
                 int dex = ran2.Next(0, deck.Count());
-                board.Add(deck[dex < deck.Count() ? dex : 0]);
-                deck.RemoveAt(dex < deck.Count() ? dex : 0);
+                board.Add(deck[dex]);
+                deck.RemoveAt(dex);
 
             }
             if (subround == 3)
@@ -152,17 +158,7 @@ namespace ConsoleApp26
                         break;
                     if ((peeps.Where(mp => mp.folded == true).Count() >= peeps.Count() - 1))
                         break;
-                    if (one2.cards.Count() == 0)
-                    {
-                        one2.cards = new List<string>();
-                        for (var d = 0; d < 2; d++)
-                        {
-
-                            int dex = ran2.Next(0, deck.Count());
-                            one2.cards.Add(deck[dex < deck.Count() ? dex : 0]);
-                            deck.RemoveAt(dex < deck.Count() ? dex : 0);
-                        }
-                    }
+                    
 
 
                     System.Threading.Thread.Sleep(500); Console.WriteLine("__________turn_" + turn + "_start_________");

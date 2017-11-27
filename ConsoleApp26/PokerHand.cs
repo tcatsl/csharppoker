@@ -32,7 +32,6 @@ namespace ConsoleApp26
         {
             this.orig = hand;
             this.arr = new string[7];
-            this.nums = new char[7];
             this.suits = new char[7];
             this.straightArr = new char[5];
             this.straight = true;
@@ -43,6 +42,8 @@ namespace ConsoleApp26
         {
             //populate arrays
             pok.arr = pok.orig.Split(' ');
+            pok.straightArr = new char[5];
+            pok.nums = new char[7];
             for (int c = 0; c < 7; c++)
             {
                 pok.suits[c] = pok.arr[c][1]; //second char
@@ -61,7 +62,7 @@ namespace ConsoleApp26
 
             //straight determination
             pok.nums = !pok.flush ? pok.nums.OrderBy(groupx => Array.IndexOf(customOrder, groupx)).ToArray() : pok.arr.Where(suit1 => pok.arr.Where(suit2 => suit1[1] == suit2[1]).Count() >= 5).Select(card => card[0]).OrderBy(group => Array.IndexOf(customOrder, group)).ToArray();
-
+            
             //card to start at for straight determination
             int strikes = 0;
             int streak = 1;
@@ -71,9 +72,16 @@ namespace ConsoleApp26
             for (int o = 0; o < pok.nums.Distinct().Count() - 1; o++)
 
             {
+                if (streak == 4 && pok.nums.Distinct().ToList()[0] == 'A' && streak == 4 ? pok.straightArr[streak-1] == '2' : false)
 
+                {
+                    pok.straightArr[4] = 'A';
+
+                    streak++;
+                    break;
+                }
                 start = customOrder.ToList().IndexOf(pok.nums.Distinct().ToList()[o]);
-                if (streak >= 5 || pok.nums.Distinct().Count() < 5)
+                if (streak >= 5 || pok.nums.Distinct().Count() < 5 || pok.four == true || pok.full == true)
                     break;
 
                 int ahead = customOrder.ToList().IndexOf(pok.nums.Distinct().ToList()[o + 1]);
@@ -86,21 +94,16 @@ namespace ConsoleApp26
                 }
                 else
                 {
-                    pok.straightArr[streak - 1] = pok.nums.Distinct().ToList()[o];
-                    pok.straightArr[streak] = pok.nums.Distinct().ToList()[o + 1];
+                    
+                    pok.straightArr[streak] = pok.nums.Distinct().ToList()[o+1];
+                    pok.straightArr[streak-1] = pok.nums.Distinct().ToList()[o];
 
                     streak++;
                     continue;
                 }
                 //if the cards aren't consecutive
             }
-            if (streak == 4 && pok.nums.Distinct().ToList()[0] == 'A' && pok.straightArr[streak - 1] == '2')
-
-            {
-                pok.straightArr[4] = 'A';
-
-                streak++;
-            }
+            
             if (streak < 5)
             {
                 pok.straight = false;
