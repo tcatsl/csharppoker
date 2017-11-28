@@ -76,7 +76,7 @@ namespace RealPokerTime
         }
         public static void RoundStart()
         {
-            if (subround > 0)
+            if (rounds > 0)
                 ante = ante + 30;
             Game.fullamt = ante;
             deck = new List<string>();
