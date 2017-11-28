@@ -6,10 +6,10 @@ namespace ConsoleApp26
 {
     public static class Game
     {
-        public static string version = "0.963b";
+        public static string version = "0.965b";
         public static int fullamt = 0;
         public static List<string> playercards = new List<string>();
-        public static List<Player> peeps = new List<Player> { new Player(false, "knuckles", 2500), new Player(false, "Dante", 2500), new Player(false, "Jeanne", 2500) };
+        public static List<Player> peeps;
         public static Random ran2 = new Random();
         public static int pot = 0;
         public static int ante = 50;
@@ -22,10 +22,10 @@ namespace ConsoleApp26
         public static string namer;
         public static void GameStart()
         {
-            int cree = 0;
+            int cred = 0;
             System.Threading.Thread.Sleep(500); Console.WriteLine("##################new game#################");
 
-
+            peeps = new List<Player> { new Player(false, "knuckles", 2500), new Player(false, "Dante", 2500), new Player(false, "Jeanne", 2500) };
             System.Threading.Thread.Sleep(500); Console.WriteLine("Whats your name?");
             namer = Console.ReadLine();
             Optola:
@@ -35,21 +35,21 @@ namespace ConsoleApp26
             if (opt == "spectate")
             {
 
-                peeps.Add(new Player(true, namer, cree));
+                peeps.Add(new Player(true, namer, cred));
 
                 peeps[peeps.Count() - 1].folded = true;
 
             } else if (opt == "play")
             {
-                cree = 2500;
+                cred = 2500;
 
-                peeps.Add(new Player(true, namer, cree));
+                peeps.Add(new Player(true, namer, cred));
 
                 peeps[peeps.Count() - 1].folded = false;
             } else if (opt == "control all players") {
-                cree = 2500;
+                cred = 2500;
 
-                peeps.Add(new Player(true, namer, cree));
+                peeps.Add(new Player(true, namer, cred));
 
                 peeps[peeps.Count() - 1].folded = false;
                 foreach (Player cc in peeps)

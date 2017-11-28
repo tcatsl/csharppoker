@@ -89,6 +89,7 @@ namespace ConsoleApp26
 
                 }
                 this.credit = 0;
+                
                 goto Donezo;
             }
             Game.pot += this.curr;
@@ -125,6 +126,7 @@ namespace ConsoleApp26
             }
             this.credit -= bettin;
             this.inpot += bettin;
+            Console.WriteLine("here");
             Game.pot += bettin;
             Game.fullamt += bettin;
             foreach (Player dude in Game.peeps)
@@ -494,7 +496,7 @@ namespace ConsoleApp26
                     this.NotAI();
                 }
             }
-            else if (this.curr <= this.credit)
+            else if (this.curr < this.credit)
             {
                 System.Threading.Thread.Sleep(500); Console.WriteLine("pot: " + Game.pot);
                 System.Threading.Thread.Sleep(500); Console.WriteLine("current bet: " + this.curr);
