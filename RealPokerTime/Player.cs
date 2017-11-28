@@ -24,7 +24,7 @@ namespace RealPokerTime
         public int temploss;
         public int iterloss;
         public int loss;
-        Random ran;
+        public Random ran;
         public Player(bool play, string init, int cred)
         {
             this.name = init;
@@ -54,12 +54,12 @@ namespace RealPokerTime
             }
 
             int maxValue = Game.peeps.Where(opp => opp != this && opp.folded == false).Select(unc => unc.credit - unc.curr).Max();
-            int maxIndex = Game.peeps.Select(unc => unc.credit- unc.curr).ToList().IndexOf(maxValue);
+            int maxIndex = Game.peeps.Where(opp => opp != this && opp.folded == false).Select(unc => unc.credit- unc.curr).ToList().IndexOf(maxValue);
             if (maxIndex != -1)
             {
-                if (temp >= Game.peeps[maxIndex].credit && temp <= credit - curr)
+                if (temp >= Game.peeps[maxIndex].credit - Game.peeps[maxIndex].curr && temp <= credit - curr)
                 {
-                    temp = Game.peeps[maxIndex].credit;
+                    temp = Game.peeps[maxIndex].credit - Game.peeps[maxIndex].curr;
                         if (temp == 0)
                     {
                         this.Check();
@@ -68,17 +68,17 @@ namespace RealPokerTime
                     System.Threading.Thread.Sleep(500); Console.WriteLine(this.name + " puts everyone all in for " + (temp) + ".");
                 }
             }
-            if (temp >= credit)
+            if (temp >= credit-curr)
             {
                 Game.pot += this.credit;
                 if (maxIndex != -1)
                 {
                     if (!(temp >= Game.peeps[maxIndex].credit && temp <= credit - curr))
-                        System.Threading.Thread.Sleep(500); Console.WriteLine(this.name + " goes all in for " + this.credit + ".");
+                        System.Threading.Thread.Sleep(500); Console.WriteLine(this.name + " goes all in for " + this.credit+ ".");
                 } else
                 {
                     if (!(temp >= Game.peeps[maxIndex].credit && temp <= credit - curr))
-                        System.Threading.Thread.Sleep(500); Console.WriteLine(this.name + " goes all in for " + this.credit + ".");
+                        System.Threading.Thread.Sleep(500); Console.WriteLine(this.name + " goes all in for " + this.credit+".");
                 }
                 this.inpot += this.credit;
 
@@ -453,7 +453,7 @@ namespace RealPokerTime
 
             if (this.folded == true)
                 return;
-            if (this.credit <= 0 || Game.peeps.Where(ok => ok.credit > 0 && !ok.folded && ok != this).Count() < 1)
+            if (this.credit <= 0 || (this.curr == 0 && Game.peeps.Where(ok => ok.credit > 0 && !ok.folded && ok != this).Count() < 1))
             {
                 this.Check();
                 return;

@@ -53,7 +53,7 @@ namespace RealPokerTime.tests
         [Test]
         public void AllInTest4()
         {
-            Game.peeps = new List<Player>() { new Player(false, "Bob", 1000), new Player(false, "Jim", 1000), new Player(false, "Sue", 0) };
+            Game.peeps = new List<Player>() { new Player(false, "Bob", 1000), new Player(false, "Jim", 1000), new Player(false, "Sue",0) };
             foreach (Player to in Game.peeps)
             {
                 to.folded = false;

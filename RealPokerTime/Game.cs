@@ -6,7 +6,7 @@ namespace RealPokerTime
 {
     public static class Game
     {
-        public static string version = "0.974b";
+        public static string version = "1.004b";
         public static int fullamt = 0;
         public static List<string> playercards = new List<string>();
         public static List<Player> peeps;
@@ -65,6 +65,10 @@ namespace RealPokerTime
             foreach (Player qq in peeps)
             {
                 qq.folded = false;
+                for (var n = 0; n < ran2.Next(0, 20); n++)
+                {
+                    qq.ran.Next(0, 21);
+                }
             }
 
             pot = 0;
@@ -196,7 +200,7 @@ namespace RealPokerTime
             }
             else if (peeps.Where(ok => ok.credit >= ante).Count() <= 1)
             {
-                if (Game.peeps.Where(ji => ji.player == true && ji.credit > ante).Select(me => me.credit).ToList()[0] >= ante)
+                if (Game.peeps.Where(ji => ji.player == false ).Select(me => me.credit).Max() <= ante)
                 {
                     System.Threading.Thread.Sleep(500); Console.WriteLine("you won; new game");
                     GameStart();
