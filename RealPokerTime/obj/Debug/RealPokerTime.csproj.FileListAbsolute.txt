@@ -1,0 +1,9 @@
+C:\Users\tcats\source\repos\ConsoleApp26\RealPokerTime\bin\Debug\RealPokerTime.exe.config
+C:\Users\tcats\source\repos\ConsoleApp26\RealPokerTime\bin\Debug\RealPokerTime.exe
+C:\Users\tcats\source\repos\ConsoleApp26\RealPokerTime\bin\Debug\RealPokerTime.pdb
+C:\Users\tcats\source\repos\ConsoleApp26\RealPokerTime\bin\Debug\nunit.framework.dll
+C:\Users\tcats\source\repos\ConsoleApp26\RealPokerTime\bin\Debug\nunit.framework.xml
+C:\Users\tcats\source\repos\ConsoleApp26\RealPokerTime\obj\Debug\RealPokerTime.csprojResolveAssemblyReference.cache
+C:\Users\tcats\source\repos\ConsoleApp26\RealPokerTime\obj\Debug\RealPokerTime.csproj.CoreCompileInputs.cache
+C:\Users\tcats\source\repos\ConsoleApp26\RealPokerTime\obj\Debug\RealPokerTime.exe
+C:\Users\tcats\source\repos\ConsoleApp26\RealPokerTime\obj\Debug\RealPokerTime.pdb

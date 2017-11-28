@@ -1,0 +1,11 @@
+C:\Users\tcats\source\repos\ConsoleApp26\RealPokerTime.tests\bin\Release\PokerHands.tests.dll
+C:\Users\tcats\source\repos\ConsoleApp26\RealPokerTime.tests\bin\Release\PokerHands.tests.pdb
+C:\Users\tcats\source\repos\ConsoleApp26\RealPokerTime.tests\bin\Release\nunit.framework.dll
+C:\Users\tcats\source\repos\ConsoleApp26\RealPokerTime.tests\bin\Release\RealPokerTime.exe
+C:\Users\tcats\source\repos\ConsoleApp26\RealPokerTime.tests\bin\Release\RealPokerTime.pdb
+C:\Users\tcats\source\repos\ConsoleApp26\RealPokerTime.tests\bin\Release\RealPokerTime.exe.config
+C:\Users\tcats\source\repos\ConsoleApp26\RealPokerTime.tests\bin\Release\nunit.framework.xml
+C:\Users\tcats\source\repos\ConsoleApp26\RealPokerTime.tests\obj\Release\RealPokerTime.Tests.csprojResolveAssemblyReference.cache
+C:\Users\tcats\source\repos\ConsoleApp26\RealPokerTime.tests\obj\Release\RealPokerTime.Tests.csproj.CoreCompileInputs.cache
+C:\Users\tcats\source\repos\ConsoleApp26\RealPokerTime.tests\obj\Release\PokerHands.tests.dll
+C:\Users\tcats\source\repos\ConsoleApp26\RealPokerTime.tests\obj\Release\PokerHands.tests.pdb

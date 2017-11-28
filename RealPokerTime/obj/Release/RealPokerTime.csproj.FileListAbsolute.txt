@@ -1,0 +1,8 @@
+C:\Users\tcats\source\repos\ConsoleApp26\RealPokerTime\bin\Release\RealPokerTime.exe.config
+C:\Users\tcats\source\repos\ConsoleApp26\RealPokerTime\bin\Release\RealPokerTime.exe
+C:\Users\tcats\source\repos\ConsoleApp26\RealPokerTime\bin\Release\RealPokerTime.pdb
+C:\Users\tcats\source\repos\ConsoleApp26\RealPokerTime\bin\Release\nunit.framework.dll
+C:\Users\tcats\source\repos\ConsoleApp26\RealPokerTime\bin\Release\nunit.framework.xml
+C:\Users\tcats\source\repos\ConsoleApp26\RealPokerTime\obj\Release\RealPokerTime.csproj.CoreCompileInputs.cache
+C:\Users\tcats\source\repos\ConsoleApp26\RealPokerTime\obj\Release\RealPokerTime.exe
+C:\Users\tcats\source\repos\ConsoleApp26\RealPokerTime\obj\Release\RealPokerTime.pdb
