@@ -128,8 +128,12 @@ namespace RealPokerTime
             }
             if (pok.twopair == true && pok.arr.Where(card1 => pok.arr.Select(str=>str[0]).Where(card2 => card1[0] == card2).Count() == 2).Count() ==6)
             {
-                pok.straightArr[4] = pok.arr.Where(card1 => pok.arr.Select(str => str[0]).Where(card => card1[0] == card).Count() == 1).Select(ch => ch[0]).OrderBy(group => Array.IndexOf(customOrder, group)).ToList()[0];
+                if (customOrder.ToList().IndexOf(pok.straightArr[4]) > customOrder.ToList().IndexOf( pok.arr.Where(card1 => pok.arr.Select(str => str[0]).Where(card => card1[0] == card).Count() == 1).Select(ch => ch[0]).OrderBy(group => Array.IndexOf(customOrder, group)).ToList()[0] ))
+                {
+                    pok.straightArr[4] = pok.arr.Where(card1 => pok.arr.Select(str => str[0]).Where(card => card1[0] == card).Count() == 1).Select(ch => ch[0]).OrderBy(group => Array.IndexOf(customOrder, group)).ToList()[0];
+                }
             }
+               
             //generate binary hand reduction for easy scoring
             //System.Threading.Thread.Sleep(500); Console.WriteLine(pok.straight);
             pok.binwin = new int[] { straightflush ? 1 : 0, pok.four ? 1 : 0, pok.full ? 1 : 0, pok.flush ? 1 : 0, pok.straight ? 1 : 0, pok.trip ? 1 : 0, pok.twopair ? 1 : 0, pok.pair ? 1 : 0, 1 }; //high card is always true
