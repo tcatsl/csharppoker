@@ -298,7 +298,7 @@ namespace RealPokerTime
             List<List<string>> oppcards = new List<List<string>>();
             List<string> encards = string.Join(" ", Game.peeps.Where(peeper => peeper != this && peeper.cards.Count() > 0).Select(io => string.Join(" ", io.cards)).ToList()).Split(new char[] { ' '}).ToList();
             List<string> tempdeck = new List<string>(Game.deck.Concat(encards));
-            for (int u = 0; u < Game.peeps.Where(mip => mip != this).Count(); u++)
+            for (int u = 0; u < Game.peeps.Where(mip => mip != this && mip.cards.Count() > 0).Count(); u++)
             {
                 List<string> tempc = new List<string>();
                 for (int im = 0; im < 2; im++)
@@ -315,7 +315,7 @@ namespace RealPokerTime
                 tempcards.Add(tempdeck[dex]);
                 tempdeck.RemoveAt(dex);
             }
-            for (int u = 0; u < Game.peeps.Where(pl => pl != this && pl.folded == false).Count(); u++)
+            for (int u = 0; u < Game.peeps.Where(pl => pl != this && pl.cards.Count()>0 && pl.folded == false).Count(); u++)
 
             {
                 List<string> opp = oppcards[u];
@@ -387,7 +387,7 @@ namespace RealPokerTime
                 tempcards.Add(tempdeck[dex]);
                 tempdeck.RemoveAt(dex);
             }
-            for (int u = 0; u < Game.peeps.Where(pl => pl != this && pl.folded == false).Count(); u++)
+            for (int u = 0; u < Game.peeps.Where(pl => pl != this && pl.folded == false && pl.cards.Count() > 0).Count(); u++)
 
             {
                 List<string> opp = oppcards[u];

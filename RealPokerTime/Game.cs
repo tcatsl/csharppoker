@@ -6,7 +6,7 @@ namespace RealPokerTime
 {
     public static class Game
     {
-        public static string version = "1.013";
+        public static string version = "1.014";
         public static int fullamt = 0;
         public static List<string> playercards = new List<string>();
         public static List<Player> peeps;
