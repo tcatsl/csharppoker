@@ -47,39 +47,67 @@ namespace RealPokerTime
         public void Bet(int amt)
         {
             BetAgain:
+            bool allin = false;
+            bool putall = false;
             int temp = amt;
-            if (temp >= credit)
+            int bettin = 0;
+            if (this.player == false && temp == 0 && Game.ante < (int)(this.credit / (3 - Game.subround * ((double)(1 / 2)))))
+            {
+                temp = ran.Next(Game.ante, (int)(this.credit / (3 - Game.subround * ((double)(1 / 2)))));
+            }
+            else if (this.player == false && temp == 0 && Game.ante <= credit - curr - Game.ante)
+            {
+                temp = Game.ante;
+            } else
+            {
+                temp = credit;
+            }
+
+            if (temp != 0)
+                bettin = temp;
+            if (credit <= 0)
+            {
+                temp = 0;
+                bettin = 0;
+                curr = 0;
+                goto Donezo;
+            }
+            if (temp > credit)
             {
                 temp = credit;
             }
 
             int maxValue = Game.peeps.Where(opp => opp != this && opp.folded == false).Select(unc => unc.credit - unc.curr).Max();
-            int maxIndex = Game.peeps.Where(opp => opp != this && opp.folded == false).Select(unc => unc.credit- unc.curr).ToList().IndexOf(maxValue);
+            int maxIndex = Game.peeps.Where(opp => opp != this && opp.folded == false).Select(unc => unc.credit - unc.curr).ToList().IndexOf(maxValue);
             if (maxIndex != -1)
             {
-                if (temp >= Game.peeps[maxIndex].credit - Game.peeps[maxIndex].curr && temp <= credit - curr)
+                if (temp - curr >= Game.peeps.Where(opp => opp != this && opp.folded == false).ToList()[maxIndex].credit - Game.peeps.Where(opp => opp != this && opp.folded == false).ToList()[maxIndex].curr && temp <= credit - curr)
                 {
-                    temp = Game.peeps[maxIndex].credit - Game.peeps[maxIndex].curr;
-                        if (temp == 0)
+                    temp = Game.peeps.Where(opp => opp != this && opp.folded == false).ToList()[maxIndex].credit - Game.peeps.Where(opp => opp != this && opp.folded == false).ToList()[maxIndex].curr;
+                    if (temp <= 0 && curr <= 0)
                     {
                         this.Check();
                         return;
                     }
                     System.Threading.Thread.Sleep(500); Console.WriteLine(this.name + " puts everyone all in for " + (temp) + ".");
+                    putall = true;
+                    goto Betola;
                 }
             }
-            if (temp >= credit-curr)
+            if (temp == credit)
             {
                 Game.pot += this.credit;
                 if (maxIndex != -1)
                 {
                     if (!(temp >= Game.peeps[maxIndex].credit && temp <= credit - curr))
-                        System.Threading.Thread.Sleep(500); Console.WriteLine(this.name + " goes all in for " + this.credit+ ".");
-                } else
+                        System.Threading.Thread.Sleep(500); Console.WriteLine(this.name + " goes all in for " + this.credit + ".");
+                }
+                else
                 {
                     if (!(temp >= Game.peeps[maxIndex].credit && temp <= credit - curr))
-                        System.Threading.Thread.Sleep(500); Console.WriteLine(this.name + " goes all in for " + this.credit+".");
+                        System.Threading.Thread.Sleep(500); Console.WriteLine(this.name + " goes all in for " + this.credit + ".");
                 }
+                allin = true;
                 this.inpot += this.credit;
 
 
@@ -94,55 +122,33 @@ namespace RealPokerTime
 
                 }
                 this.credit = 0;
-                
+
                 goto Donezo;
             }
-            Game.pot += this.curr;
-            this.inpot += this.curr;
-            this.credit -= this.curr;
-            int bettin = 0;
-            if (this.player == false && temp == 0 && Game.ante < (int)(this.credit / (3 - Game.rounds * ((double)(1 / 2)))))
-            {
-                temp = ran.Next(Game.ante, (int)(this.credit / (3 - Game.rounds * ((double)(1 / 2)))));
-            }
-            else if (this.player == false && temp == 0 && Game.ante <= credit-curr-Game.ante)
-            {
-                temp = Game.ante;
-            }
-            else if (this.player == false && temp == 0)
-            {
-                temp = credit;
-                goto BetAgain;
-            }
-            if (credit <= 0)
-            {
-                temp = 0;
-                bettin = 0;
-                curr = 0;
-            }
-            if (temp != 0)
-                bettin = temp;
-            if (maxIndex != -1)
-            {
-                if (temp < Game.peeps[maxIndex].credit && !(temp >= credit))
+                Betola:
+                Game.pot += this.curr;
+                this.inpot += this.curr;
+                this.credit -= this.curr;
+                
+                
+               if (!putall)
+                        System.Threading.Thread.Sleep(500); Console.WriteLine(this.name + (this.curr > 0 ? (" calls " + this.curr + " and") : "") + " raises " + bettin + ".");
+               
+                this.credit -= bettin;
+                this.inpot += bettin;
+                Game.pot += bettin;
+                Game.fullamt += bettin;
+                foreach (Player dude in Game.peeps)
                 {
-                    System.Threading.Thread.Sleep(500); Console.WriteLine(this.name + (this.curr > 0 ? (" calls " + this.curr + " and") : "") + " raises " + bettin + ".");
+                    if (dude != this && dude.folded == false && dude.credit > 0)
+                        dude.curr += bettin;
                 }
-            }
-            this.credit -= bettin;
-            this.inpot += bettin;
-            Game.pot += bettin;
-            Game.fullamt += bettin;
-            foreach (Player dude in Game.peeps)
-            {
-                if (dude != this && dude.folded == false && dude.credit > 0)
-                    dude.curr += bettin;
-            }
-
+            
 
             this.curr = 0;
             Donezo:
             this.curr = 0;
+
         }
 
         public void Fold()

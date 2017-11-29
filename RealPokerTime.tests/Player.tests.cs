@@ -53,7 +53,7 @@ namespace RealPokerTime.tests
         [Test]
         public void AllInTest4()
         {
-            Game.peeps = new List<Player>() { new Player(false, "Bob", 1000), new Player(false, "Jim", 1000), new Player(false, "Sue",0) };
+            Game.peeps = new List<Player>() { new Player(false, "Bob", 1000), new Player(false, "Jim", 1000), new Player(false, "Sue",1000) };
             foreach (Player to in Game.peeps)
             {
                 to.folded = false;
@@ -62,8 +62,28 @@ namespace RealPokerTime.tests
             Game.peeps[1].curr = 900;
             Game.peeps[0].Bet(1000);
             Assert.AreEqual(1900, Game.peeps[1].curr);
-            Assert.AreEqual(0, Game.peeps[2].curr);
+            Assert.AreEqual(1000, Game.peeps[2].curr);
             Assert.AreEqual(1000, Game.peeps[0].inpot);
+        }
+        [Test]
+        public void BetTest1()
+        {
+            for (int f = 0; f < 50; f++)
+            {
+
+                Game.peeps = new List<Player>() { new Player(false, "Bob", 10000), new Player(false, "Jim", 3000), new Player(false, "Sue", 0) };
+                foreach (Player to in Game.peeps)
+                {
+                    to.folded = false;
+                }
+                Game.subround = 4;
+                Game.peeps[0].curr = 0;
+                Game.peeps[1].curr = 900;
+                Game.peeps[0].Bet(0);
+                Assert.Greater(Game.peeps[1].curr, 900);
+                Assert.AreEqual(0, Game.peeps[2].curr);
+                Assert.Greater(Game.peeps[0].inpot, 0);
+            }
         }
     }
 }
