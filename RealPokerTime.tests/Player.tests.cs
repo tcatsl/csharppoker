@@ -68,7 +68,7 @@ namespace RealPokerTime.tests
         [Test]
         public void BetTest1()
         {
-            for (int f = 0; f < 50; f++)
+            for (int f = 0; f < 15; f++)
             {
 
                 Game.peeps = new List<Player>() { new Player(false, "Bob", 10000), new Player(false, "Jim", 3000), new Player(false, "Sue", 0) };
