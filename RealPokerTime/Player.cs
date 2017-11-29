@@ -58,7 +58,7 @@ namespace RealPokerTime
             else if (this.player == false && temp == 0 && Game.ante <= credit - curr - Game.ante)
             {
                 temp = Game.ante;
-            } else
+            } else if (temp == 0)
             {
                 temp = credit;
             }
