@@ -72,9 +72,9 @@ namespace RealPokerTime
                 curr = 0;
                 goto Donezo;
             }
-            if (temp > credit)
+            if (temp >= credit - curr)
             {
-                temp = credit;
+                temp = credit- curr;
             }
 
             int maxValue = Game.peeps.Where(opp => opp != this && opp.folded == false).Select(unc => unc.credit - unc.curr).Max();
@@ -95,7 +95,7 @@ namespace RealPokerTime
                     goto Betola;
                 }
             }
-            if (temp >= credit)
+            if (temp + curr >= credit)
             {
                 Game.pot += this.credit;
                 if (maxIndex != -1)
@@ -115,7 +115,14 @@ namespace RealPokerTime
                 foreach (Player dude in Game.peeps)
                 {
                     if (dude.folded == false && dude.credit > 0 && dude != this && (this.credit - this.curr) > 0)
-                        dude.curr += this.credit - this.curr;
+                      if  (dude.credit - dude.curr >= this.credit -this.curr)
+                        {
+                            dude.curr += this.credit-this.curr;
+                        } else
+                        {
+                            dude.curr = dude.credit;
+                        }
+                        
                 }
                 if (Game.peeps.Where(dude => dude.folded == false && dude.credit > 0 && dude != this).Count() > 0 && (this.credit - this.curr) > 0)
                 {
@@ -142,9 +149,16 @@ namespace RealPokerTime
                 Game.fullamt += bettin;
                 foreach (Player dude in Game.peeps)
                 {
-                    if (dude != this && dude.folded == false && dude.credit > 0)
+                if (dude.folded == false && dude.credit > 0 && dude != this)
+                    if (dude.credit - dude.curr >= bettin)
+                    {
                         dude.curr += bettin;
-                }
+                    }
+                    else
+                    {
+                        dude.curr = dude.credit;
+                    }
+            }
             
 
             this.curr = 0;
