@@ -84,6 +84,7 @@ namespace RealPokerTime
                 if (temp - curr >= Game.peeps.Where(opp => opp != this && opp.folded == false).ToList()[maxIndex].credit - Game.peeps.Where(opp => opp != this && opp.folded == false).ToList()[maxIndex].curr && temp <= credit - curr)
                 {
                     temp = Game.peeps.Where(opp => opp != this && opp.folded == false).ToList()[maxIndex].credit - Game.peeps.Where(opp => opp != this && opp.folded == false).ToList()[maxIndex].curr;
+                    bettin = temp;
                     if (temp <= 0 && curr <= 0)
                     {
                         this.Check();
@@ -94,7 +95,7 @@ namespace RealPokerTime
                     goto Betola;
                 }
             }
-            if (temp == credit)
+            if (temp >= credit)
             {
                 Game.pot += this.credit;
                 if (maxIndex != -1)
@@ -129,11 +130,12 @@ namespace RealPokerTime
                 Game.pot += this.curr;
                 this.inpot += this.curr;
                 this.credit -= this.curr;
-                
-                
-               if (!putall)
-                        System.Threading.Thread.Sleep(500); Console.WriteLine(this.name + (this.curr > 0 ? (" calls " + this.curr + " and") : "") + " raises " + bettin + ".");
-               
+
+
+            if (!putall)
+            {
+                System.Threading.Thread.Sleep(500); Console.WriteLine(this.name + (this.curr > 0 ? (" calls " + this.curr + " and") : "") + " raises " + bettin + ".");
+            }
                 this.credit -= bettin;
                 this.inpot += bettin;
                 Game.pot += bettin;
