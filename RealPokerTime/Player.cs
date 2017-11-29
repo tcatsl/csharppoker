@@ -51,9 +51,9 @@ namespace RealPokerTime
             bool putall = false;
             int temp = amt;
             int bettin = 0;
-            if (this.player == false && temp == 0 && Game.ante < (int)(this.credit / (3 - Game.subround * ((double)(1 / 2)))))
+            if (this.player == false && temp == 0 && Game.ante < (int)(this.credit / (3 - (Game.subround * ((double)(1 / 2))))))
             {
-                temp = ran.Next(Game.ante, (int)(this.credit / (3 - Game.subround * ((double)(1 / 2)))));
+                temp = ran.Next(Game.ante, (int)(this.credit / (3 - (Game.subround * ((double)(1 / 2))))));
             }
             else if (this.player == false && temp == 0 && Game.ante <= credit - curr - Game.ante)
             {
@@ -81,7 +81,7 @@ namespace RealPokerTime
             int maxIndex = Game.peeps.Where(opp => opp != this && opp.folded == false).Select(unc => unc.credit - unc.curr).ToList().IndexOf(maxValue);
             if (maxIndex != -1)
             {
-                if (temp - curr >= Game.peeps.Where(opp => opp != this && opp.folded == false).ToList()[maxIndex].credit - Game.peeps.Where(opp => opp != this && opp.folded == false).ToList()[maxIndex].curr && temp <= credit - curr)
+                if (temp >= Game.peeps.Where(opp => opp != this && opp.folded == false).ToList()[maxIndex].credit - Game.peeps.Where(opp => opp != this && opp.folded == false).ToList()[maxIndex].curr && temp <= credit - curr)
                 {
                     temp = Game.peeps.Where(opp => opp != this && opp.folded == false).ToList()[maxIndex].credit - Game.peeps.Where(opp => opp != this && opp.folded == false).ToList()[maxIndex].curr;
                     bettin = temp;
